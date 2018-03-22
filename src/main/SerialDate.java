@@ -1,7 +1,9 @@
+package main;
 import java.io.Serializable;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public abstract class SerialDate implements Comparable,
                                     Serializable,
@@ -68,7 +70,7 @@ public abstract class SerialDate implements Comparable,
 
     public static final int PRECEDING = -1;
 
-    public static final int NERREST = 0;
+    public static final int NEAREST = 0;
 
     public static final int FOLLOWING = 1;
 
@@ -581,7 +583,7 @@ public abstract class SerialDate implements Comparable,
 
         switch (relative) {
             case SerialDate.PRECEDING : return "Preceding";
-            case SerialDate.NERREST : return "Nearest";
+            case SerialDate.NEAREST: return "Nearest";
             case SerialDate.FOLLOWING : return "Following";
             default: return "ERROR: Relative To String";
         }
@@ -609,6 +611,19 @@ public abstract class SerialDate implements Comparable,
      */
     public static SerialDate createInstance(final int serial) {
         return new SpreadsheetDate(serial);
+    }
+
+    /**
+     * Factory method that returns an instance of a subclass of SerialDate
+     * @param date A Java date object
+     * @return a instance of SerialDate
+     */
+    public static SerialDate createInstance(final java.util.Date date) {
+        final GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        return new SpreadsheetDate(
+                calendar.get(Calendar.DATE), calendar.get(Calendar.MONDAY) + 1,
+                calendar.get(Calendar.YEAR));
     }
 
     /**

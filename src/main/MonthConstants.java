@@ -1,3 +1,5 @@
+package main;
+
 public interface MonthConstants {
     /** Constant for January */
     public static final int JANUARY = 1;
