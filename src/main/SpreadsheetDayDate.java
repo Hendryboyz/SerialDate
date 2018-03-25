@@ -1,9 +1,8 @@
 package main;
 
 import java.util.Calendar;
-import java.util.Date;
 
-public class SpreadsheetDate extends SerialDate {
+public class SpreadsheetDayDate extends DayDate {
 
     /** For serialization */
     private static final long serialVersionUID = -2039586703574454461L;
@@ -31,7 +30,7 @@ public class SpreadsheetDate extends SerialDate {
      * @param month the month (in the range 1 to 12).
      * @param year the year (in the range 1900 to 9999).
      */
-    public SpreadsheetDate(final int day, final int month, final int year) {
+    public SpreadsheetDayDate(final int day, final int month, final int year) {
 
         if ((year >= 1900) && (year <= 9999)) {
             this.year = year;
@@ -52,7 +51,7 @@ public class SpreadsheetDate extends SerialDate {
             );
         }
 
-        if ((day >= 1) && (day <= SerialDate.lastDayOfMonth(month, year))) {
+        if ((day >= 1) && (day <= DayDate.lastDayOfMonth(month, year))) {
             this.day = day;
         }
         else {
@@ -78,10 +77,10 @@ public class SpreadsheetDate extends SerialDate {
      * @return the serial number from the day, month and year
      */
     private int calcSerial(final int d, final int m, final int y) {
-        final int yy = ((y - 1900) * 365) + SerialDate.leapYearCount(y - 1);
-        int mm = SerialDate.AGGREGATE_DAYS_TO_END_OF_PRECEDIND_MONTH[m];
+        final int yy = ((y - 1900) * 365) + DayDate.leapYearCount(y - 1);
+        int mm = DayDate.AGGREGATE_DAYS_TO_END_OF_PRECEDIND_MONTH[m];
         if (m > MonthConstants.FEBRUARY) {
-            if (SerialDate.isLeapYear(y)) {
+            if (DayDate.isLeapYear(y)) {
                 mm = mm + 1;
             }
         }
@@ -94,13 +93,13 @@ public class SpreadsheetDate extends SerialDate {
      * specified day number (which should be in the range 2 to 2958465).
      * @param serial the serial number for the day (range: 2 to 2958465).
      */
-    public SpreadsheetDate(int serial) {
+    public SpreadsheetDayDate(int serial) {
         if ((serial >= SERIAL_LOWER_BOUND) && (serial <= SERIAL_UPPER_BOUND)) {
             this.serial = serial;
         }
         else {
             throw new IllegalArgumentException(
-                    "SpreadsheetDate: Serial must be in range 2 to 2958465."
+                    "SpreadsheetDayDate: Serial must be in range 2 to 2958465."
             );
         }
         // the day-month-year needs to be synchronised with the serial number...
@@ -116,7 +115,7 @@ public class SpreadsheetDate extends SerialDate {
 
         // overestimated because we ignored leap days
         final int overestimatedYYYY = 1900 + (days / 365);
-        final int leaps = SerialDate.leapYearCount(overestimatedYYYY);
+        final int leaps = DayDate.leapYearCount(overestimatedYYYY);
         final int nonleapdays = days - leaps;
         // underestimated because we overestimated year
         int underestimatedYYYY = 1900 + (nonleapdays / 365);
@@ -188,11 +187,11 @@ public class SpreadsheetDate extends SerialDate {
     }
 
     /**
-     * Returns a <code>java.util.Date</code> equivalent to this date.
+     * Returns a <code>java.util.DayDate</code> equivalent to this date.
      * @return The date
      */
     @Override
-    public Date toDate() {
+    public java.util.Date toDate() {
         final Calendar calendar = Calendar.getInstance();
         calendar.set(getYYYY(), getMonth() - 1, getDayOfMonth(), 0, 0, 0);
         return calendar.getTime();
@@ -228,7 +227,7 @@ public class SpreadsheetDate extends SerialDate {
     /**
      * Returns a code representing the day of the week
      * <P>
-     *     The codes are defined in the {@link SerialDate} class as
+     *     The codes are defined in the {@link DayDate} class as
      *     <code>SUNDAY</code>, <code>MONDAY</code>, <code>TUESDAY</code>
      *     <code>WEDNESDAY</code>, <code>THURSDAY</code>, <code>FRIDAY</code> and
      *     <code>SATURDAY</code>
@@ -244,15 +243,15 @@ public class SpreadsheetDate extends SerialDate {
      * Tests the equality of this date with an arbitrary object
      * <P>
      *     This method will return true ONLY if the object is an instance of the
-     *     {@link SerialDate} base class, and it represents the same day as this
-     *     {@link SpreadsheetDate}
+     *     {@link DayDate} base class, and it represents the same day as this
+     *     {@link SpreadsheetDayDate}
      * </P>
      * @param object the object to compare (<code>null</code> permitted)
      * @return A boolean
      */
     public boolean equals(final Object object) {
-        if (object instanceof SerialDate) {
-            final SerialDate s = (SerialDate) object;
+        if (object instanceof DayDate) {
+            final DayDate s = (DayDate) object;
             return (s.toSerial() == this.toSerial());
         }
         else {
@@ -276,83 +275,83 @@ public class SpreadsheetDate extends SerialDate {
      *      'other' date.
      */
     @Override
-    public int compare(final SerialDate other) {
+    public int compare(final DayDate other) {
         return this.serial - other.toSerial();
     }
 
     /**
      * Implements the method required the Comparable interface.
-     * @param other the other object (usually another SerialDate).
+     * @param other the other object (usually another DayDate).
      * @return A negative integer, zero, or a positive integer as this object
      *          is less than, equal to, or greater than the specified object.
      */
     @Override
     public int compareTo(final Object other) {
-        return compare((SerialDate) other);
+        return compare((DayDate) other);
     }
 
     /**
-     * Returns true if this SerialDate represents the same date as the specified
-     * SerialDate.
+     * Returns true if this DayDate represents the same date as the specified
+     * DayDate.
      * @param other the date being compared to
-     * @return <code>true</code> if this SerialDate represents the same date
-     *          as the specified SerialDate.
+     * @return <code>true</code> if this DayDate represents the same date
+     *          as the specified DayDate.
      */
     @Override
-    public boolean isOn(final SerialDate other) {
+    public boolean isOn(final DayDate other) {
         return (this.serial == other.toSerial());
     }
 
     /**
-     * Returns true if this SerialDate represents an earlier date compared to the
-     * specified SerialDate.
+     * Returns true if this DayDate represents an earlier date compared to the
+     * specified DayDate.
      * @param other other The dat being compared to.
-     * @return <code>true</code> if this SerialDate represents an earlier date
-     *          compared to the specified SerialDate.
+     * @return <code>true</code> if this DayDate represents an earlier date
+     *          compared to the specified DayDate.
      */
     @Override
-    public boolean isBefore(SerialDate other) {
+    public boolean isBefore(DayDate other) {
         return (this.serial < other.toSerial());
     }
 
     /**
-     * Returns true if this SerialDate represents the same date as the
-     * specified SerialDate
+     * Returns true if this DayDate represents the same date as the
+     * specified DayDate
      * @param other the date being compared to.
-     * @return <code>true</code> if this SerialDate represents the same date
-     *          as the specified SerialDate.
+     * @return <code>true</code> if this DayDate represents the same date
+     *          as the specified DayDate.
      */
     @Override
-    public boolean isOnOrBefore(SerialDate other) {
+    public boolean isOnOrBefore(DayDate other) {
         return (this.serial <= other.toSerial());
     }
 
     /**
-     * Returns true if this SerialDate represents the same date as the specified
-     * SerialDate
+     * Returns true if this DayDate represents the same date as the specified
+     * DayDate
      * @param other the date being compared to
-     * @return <code>true</code> if this SerialDate represents the same date
-     *          as the specified SerialDate.
+     * @return <code>true</code> if this DayDate represents the same date
+     *          as the specified DayDate.
      */
     @Override
-    public boolean isAfter(SerialDate other) {
+    public boolean isAfter(DayDate other) {
         return (this.serial > other.toSerial());
     }
 
     /**
-     * Returns true if this SerialDate represents the same date as the specified
-     * SerialDate
+     * Returns true if this DayDate represents the same date as the specified
+     * DayDate
      * @param other the date being compared to
-     * @return <code>true</code> if this SerialDate represents the same date
-     *          as the specified SerialDate.
+     * @return <code>true</code> if this DayDate represents the same date
+     *          as the specified DayDate.
      */
     @Override
-    public boolean isOnOrAfter(SerialDate other) {
+    public boolean isOnOrAfter(DayDate other) {
         return (this.serial >= other.toSerial());
     }
 
     /**
-     * Returns <code>true</code> if this {@link SerialDate} is within the
+     * Returns <code>true</code> if this {@link DayDate} is within the
      * specified range (INCLUSIVE). The date order of d1 and d2 is not
      * important.
      * @param d1 a boundary date for the range.
@@ -360,35 +359,35 @@ public class SpreadsheetDate extends SerialDate {
      * @return A boolean
      */
     @Override
-    public boolean isInRange(SerialDate d1, SerialDate d2) {
-        return isInRange(d1, d2, SerialDate.INCLUDE_BOTH);
+    public boolean isInRange(DayDate d1, DayDate d2) {
+        return isInRange(d1, d2, DayDate.INCLUDE_BOTH);
     }
 
     /**
-     * Returns true if this SerialDate is within the specified range (caller
+     * Returns true if this DayDate is within the specified range (caller
      * specifies whether or not the end-points are included). The order of d1 and
      * d2 is not important
      * @param d1 a boundary date for the range.
      * @param d2 the other boundary date for the range.
      * @param include a code that controls whether or not the start and end
      *                dates are included in the range.
-     * @return <code>true</code> if this SerialDate is within the specified range.
+     * @return <code>true</code> if this DayDate is within the specified range.
      */
     @Override
-    public boolean isInRange(SerialDate d1, SerialDate d2, int include) {
+    public boolean isInRange(DayDate d1, DayDate d2, int include) {
         final int s1 = d1.toSerial();
         final int s2 = d2.toSerial();
         final int start = Math.min(s1, s2);
         final int end = Math.max(s1, s2);
 
         final int s = toSerial();
-        if (include == SerialDate.INCLUDE_BOTH) {
+        if (include == DayDate.INCLUDE_BOTH) {
             return (s >= start && s <= end);
         }
-        else if (include == SerialDate.INCLUDE_FIRST) {
+        else if (include == DayDate.INCLUDE_FIRST) {
             return (s >= start && s < end);
         }
-        else if (include == SerialDate.INCLUDE_SECOND) {
+        else if (include == DayDate.INCLUDE_SECOND) {
             return (s > start && s <= end);
         }
         else {
