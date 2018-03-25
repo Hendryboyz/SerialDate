@@ -4,6 +4,7 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public abstract class SerialDate implements Comparable,
                                     Serializable,
@@ -11,7 +12,8 @@ public abstract class SerialDate implements Comparable,
     private static final long serialVersionUID = -293716040467423637L;
 
     public static final DateFormatSymbols
-        DATE_FORMAT_SYMBOLS = new SimpleDateFormat().getDateFormatSymbols();
+        DATE_FORMAT_SYMBOLS = new SimpleDateFormat("", Locale.ENGLISH)
+            .getDateFormatSymbols();
 
     public static final int SERIAL_LOWER_BOUND = 2;
 
@@ -116,11 +118,11 @@ public abstract class SerialDate implements Comparable,
         int result = -1;
         s = s.trim();
         for (int i = 0; i < weekDayNames.length; i++) {
-            if (s.equals(shortWeekdayNames[i])) {
+            if (s.equalsIgnoreCase(shortWeekdayNames[i])) {
                 result = i;
                 break;
             }
-            if (s.equals(weekDayNames[i])) {
+            if (s.equalsIgnoreCase(weekDayNames[i])) {
                 result = i;
                 break;
             }
@@ -292,11 +294,12 @@ public abstract class SerialDate implements Comparable,
 
         // now search through the names...
         if ((result < 1) || (result > 12)) {
+            result = -1;
             for (int i = 0; i < monthNames.length; i++) {
-                if (s.equals(shortMonthNames[i])) {
+                if (s.equalsIgnoreCase(shortMonthNames[i])) {
                     result = i + 1;
                 }
-                if (s.equals(monthNames[i])) {
+                if (s.equalsIgnoreCase(monthNames[i])) {
                     result = i + 1;
                     break;
                 }
@@ -496,7 +499,7 @@ public abstract class SerialDate implements Comparable,
         final int adjust;
         final int baseDOW = base.getDayOfWeek();
 
-        if (baseDOW > targetWeekday) {
+        if (baseDOW >= targetWeekday) {
             adjust = 7 + Math.min(0, targetWeekday - baseDOW);
         }
         else {

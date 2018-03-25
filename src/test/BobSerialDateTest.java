@@ -23,47 +23,47 @@ public class BobSerialDateTest extends TestCase {
 
         assertEquals(MONDAY, stringToWeekdayCode("Monday"));
         assertEquals(MONDAY, stringToWeekdayCode("Mon"));
-//todo        assertEquals(MONDAY, stringToWeekdayCode("monday"));
-//        assertEquals(MONDAY, stringToWeekdayCode("MONDAY"));
-//        assertEquals(MONDAY, stringToWeekdayCode("mon"));
+        assertEquals(MONDAY, stringToWeekdayCode("monday"));
+        assertEquals(MONDAY, stringToWeekdayCode("MONDAY"));
+        assertEquals(MONDAY, stringToWeekdayCode("mon"));
 
         assertEquals(TUESDAY, stringToWeekdayCode("Tuesday"));
         assertEquals(TUESDAY, stringToWeekdayCode("Tue"));
-//todo        assertEquals(TUESDAY, stringToWeekdayCode("tuesday"));
-//        assertEquals(TUESDAY, stringToWeekdayCode("TUESDAY"));
-//        assertEquals(TUESDAY, stringToWeekdayCode("tue"));
+        assertEquals(TUESDAY, stringToWeekdayCode("tuesday"));
+        assertEquals(TUESDAY, stringToWeekdayCode("TUESDAY"));
+        assertEquals(TUESDAY, stringToWeekdayCode("tue"));
 //        assertEquals(TUESDAY, stringToWeekdayCode("tues"));
 
         assertEquals(WEDNESDAY, stringToWeekdayCode("Wednesday"));
         assertEquals(WEDNESDAY, stringToWeekdayCode("Wed"));
-//todo        assertEquals(WEDNESDAY, stringToWeekdayCode("wednesday"));
-//        assertEquals(WEDNESDAY, stringToWeekdayCode("WEDNESDAY"));
-//        assertEquals(WEDNESDAY, stringToWeekdayCode("wed"));
+        assertEquals(WEDNESDAY, stringToWeekdayCode("wednesday"));
+        assertEquals(WEDNESDAY, stringToWeekdayCode("WEDNESDAY"));
+        assertEquals(WEDNESDAY, stringToWeekdayCode("wed"));
 
         assertEquals(THURSDAY, stringToWeekdayCode("Thursday"));
         assertEquals(THURSDAY, stringToWeekdayCode("Thu"));
-//todo        assertEquals(THURSDAY, stringToWeekdayCode("thursday"));
-//        assertEquals(THURSDAY, stringToWeekdayCode("THURSDAY"));
-//        assertEquals(THURSDAY, stringToWeekdayCode("thu"));
+        assertEquals(THURSDAY, stringToWeekdayCode("thursday"));
+        assertEquals(THURSDAY, stringToWeekdayCode("THURSDAY"));
+        assertEquals(THURSDAY, stringToWeekdayCode("thu"));
 //        assertEquals(THURSDAY, stringToWeekdayCode("thurs"));
 
         assertEquals(FRIDAY, stringToWeekdayCode("Friday"));
         assertEquals(FRIDAY, stringToWeekdayCode("Fri"));
-//todo        assertEquals(FRIDAY, stringToWeekdayCode("friday"));
-//        assertEquals(FRIDAY, stringToWeekdayCode("FRIDAY"));
-//        assertEquals(FRIDAY, stringToWeekdayCode("fri"));
+        assertEquals(FRIDAY, stringToWeekdayCode("friday"));
+        assertEquals(FRIDAY, stringToWeekdayCode("FRIDAY"));
+        assertEquals(FRIDAY, stringToWeekdayCode("fri"));
 
         assertEquals(SATURDAY, stringToWeekdayCode("Saturday"));
         assertEquals(SATURDAY, stringToWeekdayCode("Sat"));
-//todo        assertEquals(SATURDAY, stringToWeekdayCode("saturday"));
-//        assertEquals(SATURDAY, stringToWeekdayCode("SATURDAY"));
-//        assertEquals(SATURDAY, stringToWeekdayCode("sat"));
+        assertEquals(SATURDAY, stringToWeekdayCode("saturday"));
+        assertEquals(SATURDAY, stringToWeekdayCode("SATURDAY"));
+        assertEquals(SATURDAY, stringToWeekdayCode("sat"));
 
         assertEquals(SUNDAY, stringToWeekdayCode("Sunday"));
         assertEquals(SUNDAY, stringToWeekdayCode("Sun"));
-//todo        assertEquals(SUNDAY, stringToWeekdayCode("sunday"));
-//        assertEquals(SUNDAY, stringToWeekdayCode("SUNDAY"));
-//        assertEquals(SUNDAY, stringToWeekdayCode("sun"));
+        assertEquals(SUNDAY, stringToWeekdayCode("sunday"));
+        assertEquals(SUNDAY, stringToWeekdayCode("SUNDAY"));
+        assertEquals(SUNDAY, stringToWeekdayCode("sun"));
     }
 
     public void testWeekdayCodeToString() throws Exception {
@@ -119,18 +119,18 @@ public class BobSerialDateTest extends TestCase {
         assertEquals("November", monthCodeToString(NOVEMBER));
         assertEquals("December", monthCodeToString(DECEMBER));
 
-        assertEquals("Jan", monthCodeToString(JANUARY));
-        assertEquals("Feb", monthCodeToString(FEBRUARY));
-        assertEquals("Mar", monthCodeToString(MARCH));
-        assertEquals("Apr", monthCodeToString(APRIL));
-        assertEquals("May", monthCodeToString(MAY));
-        assertEquals("Jun", monthCodeToString(JUNE));
-        assertEquals("Jul", monthCodeToString(JULY));
-        assertEquals("Aug", monthCodeToString(AUGUST));
-        assertEquals("Sep", monthCodeToString(SEPTEMBER));
-        assertEquals("Oct", monthCodeToString(OCTOBER));
-        assertEquals("Nov", monthCodeToString(NOVEMBER));
-        assertEquals("Dec", monthCodeToString(DECEMBER));
+        assertEquals("Jan", monthCodeToString(JANUARY, true));
+        assertEquals("Feb", monthCodeToString(FEBRUARY, true));
+        assertEquals("Mar", monthCodeToString(MARCH, true));
+        assertEquals("Apr", monthCodeToString(APRIL, true));
+        assertEquals("May", monthCodeToString(MAY, true));
+        assertEquals("Jun", monthCodeToString(JUNE, true));
+        assertEquals("Jul", monthCodeToString(JULY, true));
+        assertEquals("Aug", monthCodeToString(AUGUST, true));
+        assertEquals("Sep", monthCodeToString(SEPTEMBER, true));
+        assertEquals("Oct", monthCodeToString(OCTOBER, true));
+        assertEquals("Nov", monthCodeToString(NOVEMBER, true));
+        assertEquals("Dec", monthCodeToString(DECEMBER, true));
 
         try {
             monthCodeToString(-1);
@@ -217,7 +217,8 @@ public class BobSerialDateTest extends TestCase {
     }
 
     public void testIsValidWeekInMonthCode() throws Exception {
-        for (int w = 0; w <= 4; w++) {
+        // test case error, week code 0 is invalid
+        for (int w = 1; w <= 4; w++) {
             assertTrue(isValidWeekInMonthCode(w));
         }
         assertFalse(isValidWeekInMonthCode(5));
@@ -277,7 +278,7 @@ public class BobSerialDateTest extends TestCase {
         assertEquals(d(2, JANUARY, 1900), addDays(1, newYears));
         assertEquals(d(1, FEBRUARY, 1900), addDays(31, newYears));
         assertEquals(d(1, JANUARY, 1901), addDays(365, newYears));
-        assertEquals(d(31, JANUARY, 1904), addDays(5 * 365, newYears));
+        assertEquals(d(31, DECEMBER, 1904), addDays(5 * 365, newYears));
     }
 
     private SpreadsheetDate d(int day, int month, int year) {
@@ -299,9 +300,9 @@ public class BobSerialDateTest extends TestCase {
 
     public void testAddYears() throws Exception {
         assertEquals(d(1, JANUARY, 1901), addYears(1, d(1, JANUARY, 1900)));
-        assertEquals(d(28, FEBRUARY, 1905), addYears(1, d(29, JANUARY, 1904)));
-        assertEquals(d(28, FEBRUARY, 1905), addYears(1, d(28, JANUARY, 1904)));
-        assertEquals(d(28, FEBRUARY, 1904), addYears(1, d(28, JANUARY, 1903)));
+        assertEquals(d(28, FEBRUARY, 1905), addYears(1, d(29, FEBRUARY, 1904)));
+        assertEquals(d(28, FEBRUARY, 1905), addYears(1, d(28, FEBRUARY, 1904)));
+        assertEquals(d(28, FEBRUARY, 1904), addYears(1, d(28, FEBRUARY, 1903)));
     }
 
     public void testGetPreviousDayOfWeek() throws Exception {
@@ -318,9 +319,10 @@ public class BobSerialDateTest extends TestCase {
     }
 
     public void testGetFollowingDayOfWeek() throws Exception {
-//        assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(25, DECEMBER, 2004)));
+        assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(25, DECEMBER, 2004)));
         assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(26, DECEMBER, 2004)));
-        assertEquals(d(3, MARCH, 2004), getFollowingDayOfWeek(SATURDAY, d(28, FEBRUARY, 2004)));
+        // test case error in clean code book
+        assertEquals(d(6, MARCH, 2004), getFollowingDayOfWeek(SATURDAY, d(28, FEBRUARY, 2004)));
 
         try {
             getFollowingDayOfWeek(-1, d(1, JANUARY, 2006));
