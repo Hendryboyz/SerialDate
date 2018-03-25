@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import main.*;
 
+import static main.DayDate.*;
+
 import java.io.*;
 
 public class SerialDayDateTest extends TestCase {
@@ -32,7 +34,7 @@ public class SerialDayDateTest extends TestCase {
      * Problem set up.
      */
     protected void setUp() {
-        this.nov9Y2001 = DayDate.createInstance(9, MonthConstants.NOVEMBER, 2001);
+        this.nov9Y2001 = DayDate.createInstance(9, Month.NOVEMBER.index, 2001);
     }
 
     /**
@@ -48,16 +50,16 @@ public class SerialDayDateTest extends TestCase {
      * A test case for a reported bug, now fixed
      */
     public void testAddMonthsTo5Oct2003() {
-        final DayDate d1 = DayDate.createInstance(5, MonthConstants.OCTOBER, 2003);
+        final DayDate d1 = DayDate.createInstance(5, Month.OCTOBER.index, 2003);
         final DayDate d2 = DayDate.addMonths(2, d1);
-        assertEquals(d2, DayDate.createInstance(5, MonthConstants.DECEMBER, 2003));
+        assertEquals(d2, DayDate.createInstance(5, Month.DECEMBER.index, 2003));
     }
 
     /**
      * A test case for a reported bug, now fixed
      */
     public void testAddMonthsTo1Jan2003() {
-        final DayDate d1 = DayDate.createInstance(1, MonthConstants.JANUARY, 2003);
+        final DayDate d1 = DayDate.createInstance(1, Month.JANUARY.index, 2003);
         final DayDate d2 = DayDate.addMonths(0, d1);
         assertEquals(d2, d1);
     }
@@ -96,7 +98,7 @@ public class SerialDayDateTest extends TestCase {
      * The Monday nearest to 22 nd January 1940 falls on the 19th.
      */
     public void testMondayNearest22Jan1970() {
-        DayDate jan22Y1970 = DayDate.createInstance(22, MonthConstants.JANUARY, 1970);
+        DayDate jan22Y1970 = DayDate.createInstance(22, Month.JANUARY.index, 1970);
         DayDate mondayNearest = DayDate.getNearestDayOfWeek(DayDate.MONDAY, jan22Y1970);
         assertEquals(19, mondayNearest.getDayOfMonth());
     }
@@ -131,20 +133,20 @@ public class SerialDayDateTest extends TestCase {
      */
     public void testStringToMonthCode() {
         int m = DayDate.stringToMonthCode("January");
-        assertEquals(DayDate.JANUARY, m);
+        assertEquals(Month.JANUARY.index, m);
 
         m = DayDate.stringToMonthCode(" January ");
-        assertEquals(DayDate.JANUARY, m);
+        assertEquals(Month.JANUARY.index, m);
 
         m = DayDate.stringToMonthCode("Jan");
-        assertEquals(DayDate.JANUARY, m);
+        assertEquals(Month.JANUARY.index, m);
     }
 
     /**
      * Tests the conversion of a month code to a string
      */
     public void testMonthCodeToStringCode() {
-        final String test = DayDate.monthCodeToString(MonthConstants.DECEMBER);
+        final String test = DayDate.monthCodeToString(Month.DECEMBER);
         assertEquals("December", test);
     }
 
