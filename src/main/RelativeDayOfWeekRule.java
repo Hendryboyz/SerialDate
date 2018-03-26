@@ -60,7 +60,7 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
     /**
      * The day of the week (SerialDate.MONDAY, SerialDate.TUESDAY, and so on).
      */
-    private int dayOfWeek;
+    private DayDate.Day dayOfWeek;
 
     /** Specifies which day of the week (PRECEDING, NEAREST or FOLLOWING). */
     private int relative;
@@ -69,7 +69,7 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
      * Default constructor - builds rule based on the supplied sub-rule
      */
     public RelativeDayOfWeekRule() {
-        this(new DayAndMonthRule(), DayDate.MONDAY, DayDate.FOLLOWING);
+        this(new DayAndMonthRule(), DayDate.Day.MONDAY, DayDate.FOLLOWING);
     }
 
     /**
@@ -80,7 +80,7 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
      * @param relative indicates *which* day-of-the-week (preceding, nearest or following).
      */
     public RelativeDayOfWeekRule(final AnnualDateRule subrule,
-                                 final int dayOfWeek, final int relative) {
+                                 final DayDate.Day dayOfWeek, final int relative) {
         this.subrule = subrule;
         this.dayOfWeek = dayOfWeek;
         this.relative = relative;
@@ -111,7 +111,7 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
      *
      * @return the day-of-the-week for this rule.
      */
-    public int getDayOfWeek() {
+    public DayDate.Day getDayOfWeek() {
         return this.dayOfWeek;
     }
 
@@ -121,7 +121,7 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
      * @param dayOfWeek  the day-of-the-week (SerialDate.MONDAY,
      *                   SerialDate.TUESDAY, and so on).
      */
-    public void setDayOfWeek(final int dayOfWeek) {
+    public void setDayOfWeek(final DayDate.Day dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
 

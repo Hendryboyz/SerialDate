@@ -97,19 +97,35 @@ public abstract class DayDate implements Comparable,
         DATE_FORMAT_SYMBOLS = new SimpleDateFormat("", Locale.ENGLISH)
             .getDateFormatSymbols();
 
-    public static final int MONDAY = Calendar.MONDAY;
+    public static enum Day {
+        MONDAY(Calendar.MONDAY),
+        TUESDAY(Calendar.TUESDAY),
+        WEDNESDAY(Calendar.WEDNESDAY),
+        THURSDAY(Calendar.THURSDAY),
+        FRIDAY(Calendar.FRIDAY),
+        SATURDAY(Calendar.SATURDAY),
+        SUNDAY(Calendar.SUNDAY);
 
-    public static final int TUESDAY = Calendar.TUESDAY;
+        private final int index;
+        private  static DateFormatSymbols dateFormatSymbols
+                = new DateFormatSymbols(Locale.ENGLISH);
+        Day(int day) {
+            index = day;
+        }
 
-    public static final int WEDNESDAY = Calendar.WEDNESDAY;
+        public static Day fromInt(int index) throws IllegalArgumentException {
+            for (Day d : Day.values()) {
+                if (d.index == index)
+                    return d;
+            }
+            throw new IllegalArgumentException(
+                    String.format("Illegal day index: %d", index));
+        }
 
-    public static final int THURSDAY = Calendar.THURSDAY;
-
-    public static final int FRIDAY = Calendar.FRIDAY;
-
-    public static final int SATURDAY = Calendar.SATURDAY;
-
-    public static final int SUNDAY = Calendar.SUNDAY;
+        public int toInt() {
+            return index;
+        }
+    }
 
     static final int[] LAST_DAY_OF_MONTH =
             {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -154,29 +170,6 @@ public abstract class DayDate implements Comparable,
 
     /** Default Constructor */
     protected DayDate() {}
-
-    /**
-     * Returns <code>true</code> if the supplied integer code represents a
-     * valid day-of-the-week, and <code>false</code> otherwise.
-     *
-     * @param code the code being checked for validity
-     * @return <code>true</code> if the supplied integer code represents a
-     *          valid day-of-the-week, and <code>false</code> otherwise.
-     */
-    public static boolean isValidWeekdayCode(final int code) {
-        switch (code) {
-            case SUNDAY:
-            case MONDAY:
-            case TUESDAY:
-            case WEDNESDAY:
-            case THURSDAY:
-            case FRIDAY:
-            case SATURDAY:
-                return true;
-            default:
-                return false;
-        }
-    }
 
     /**
      * Converts the supplied string to a day of the week
@@ -494,22 +487,16 @@ public abstract class DayDate implements Comparable,
      * @return the latest date that falls on the specified day-of-the-week and
      *          is BEFORE the base date
      */
-    public static DayDate getPreviousDayOfWeek(final int targetWeekday,
+    public static DayDate getPreviousDayOfWeek(final Day targetWeekday,
                                                final DayDate base) {
-        // check arguments
-        if (!DayDate.isValidWeekdayCode(targetWeekday)) {
-            throw new IllegalArgumentException(
-                    "Invalid day-of-the-week code");
-        }
-
         // find the date...
         final int adjust;
         final int baseDOW = base.getDayOfWeek();
-        if (baseDOW > targetWeekday) {
-            adjust = Math.min(0, targetWeekday - baseDOW);
+        if (baseDOW > targetWeekday.toInt()) {
+            adjust = Math.min(0, targetWeekday.toInt() - baseDOW);
         }
         else {
-            adjust = -7 + Math.max(0, targetWeekday - baseDOW);
+            adjust = -7 + Math.max(0, targetWeekday.toInt() - baseDOW);
         }
 
         return DayDate.addDays(adjust, base);
@@ -523,25 +510,18 @@ public abstract class DayDate implements Comparable,
      * @return the earliest date that falls on the specified day-of-the-week
      *          and is AFTER the base date.
      */
-    public static DayDate getFollowingDayOfWeek(final int targetWeekday,
+    public static DayDate getFollowingDayOfWeek(final Day targetWeekday,
                                                 final DayDate base) {
-
-        //check arguments
-        if (!DayDate.isValidWeekdayCode(targetWeekday)) {
-            throw new IllegalArgumentException(
-                    "Invalid day-of-the-week code."
-            );
-        }
 
         // find the date...
         final int adjust;
         final int baseDOW = base.getDayOfWeek();
 
-        if (baseDOW >= targetWeekday) {
-            adjust = 7 + Math.min(0, targetWeekday - baseDOW);
+        if (baseDOW >= targetWeekday.toInt()) {
+            adjust = 7 + Math.min(0, targetWeekday.toInt() - baseDOW);
         }
         else {
-            adjust = Math.max(0, targetWeekday - baseDOW);
+            adjust = Math.max(0, targetWeekday.toInt() - baseDOW);
         }
 
         return DayDate.addDays(adjust, base);
@@ -556,17 +536,10 @@ public abstract class DayDate implements Comparable,
      * @return the date that falls on the specified day-of-the-week and is
      *          CLOSET to the base date.
      */
-    public static DayDate getNearestDayOfWeek(final int targetDOW,
+    public static DayDate getNearestDayOfWeek(final Day targetDOW,
                                               final DayDate base) {
-        //check arguments
-        if (!DayDate.isValidWeekdayCode(targetDOW)) {
-            throw new IllegalArgumentException(
-                    "Invalid day-of-the-week code."
-            );
-        }
-
         // find the date...
-        int delta = targetDOW - base.getDayOfWeek();
+        int delta = targetDOW.toInt() - base.getDayOfWeek();
         int positiveDelta = delta + 7;
         int adjust = positiveDelta % 7;
         if (adjust > 3)
@@ -825,7 +798,7 @@ public abstract class DayDate implements Comparable,
      *          is BEFORE this date
      */
     public DayDate getPreviousDayOfWeek(final int targetDOW) {
-        return getPreviousDayOfWeek(targetDOW, this);
+        return getPreviousDayOfWeek(Day.fromInt(targetDOW), this);
     }
 
     /**
@@ -836,7 +809,7 @@ public abstract class DayDate implements Comparable,
      *          and is AFTER this date.
      */
     public DayDate getFollowingDayOfWeek(final int targetDOW) {
-        return getFollowingDayOfWeek(targetDOW, this);
+        return getFollowingDayOfWeek(Day.fromInt(targetDOW), this);
     }
 
     /**
@@ -846,6 +819,6 @@ public abstract class DayDate implements Comparable,
      * @return the nearest date that falls on the specified day-of-the-week
      */
     public DayDate getNearestDayOfWeek(final int targetDOW) {
-        return getNearestDayOfWeek(targetDOW, this);
+        return getNearestDayOfWeek(Day.fromInt(targetDOW), this);
     }
 }
