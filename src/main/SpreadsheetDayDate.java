@@ -7,6 +7,14 @@ public class SpreadsheetDayDate extends DayDate {
     /** For serialization */
     private static final long serialVersionUID = -2039586703574454461L;
 
+    public static final int EARLIEST_DATE_ORDINAL = 2; // 1/1/1900
+
+    public static final int LATEST_DATE_ORDINAL = 2958465; // 12/31/9999
+
+    public static final int MINIMUM_YEAR_SUPPORTED = 1900;
+
+    public static final int MAXIMUM_YEAR_SUPPORTED = 9999;
+
     /**
      * The day number (1-Jan-1900 = 2, 2-Jan-1900 = 3, ..., 31-Dec-9999 = 2958465)
      */
@@ -16,7 +24,7 @@ public class SpreadsheetDayDate extends DayDate {
     private int day;
 
     /** The month of the year (1 to 12) */
-    private int month;
+    private Month month;
 
     /** The year (1900 to 9999). */
     private int year;
@@ -43,7 +51,7 @@ public class SpreadsheetDayDate extends DayDate {
 
         if ((month >= Month.JANUARY.index)
                 && (month <= Month.DECEMBER.index)) {
-            this.month = month;
+            this.month = Month.make(month);
         }
         else {
             throw new IllegalArgumentException(
@@ -62,6 +70,34 @@ public class SpreadsheetDayDate extends DayDate {
 
         // the serial number needs to be synchronised with the day-month-year....
         this.serial = calcSerial(day, month, year);
+
+        this.description = null;
+    }
+
+    public SpreadsheetDayDate(final int day, final Month month, final int year) {
+
+        if ((year >= 1900) && (year <= 9999)) {
+            this.year = year;
+        }
+        else {
+            throw new IllegalArgumentException(
+                    "The 'year' argument must be in range 1900 to 9999."
+            );
+        }
+
+        this.month = month;
+
+        if ((day >= 1) && (day <= DayDate.lastDayOfMonth(month, year))) {
+            this.day = day;
+        }
+        else {
+            throw new IllegalArgumentException(
+                    "Invalid 'day' argument."
+            );
+        }
+
+        // the serial number needs to be synchronised with the day-month-year....
+        this.serial = calcSerial(day, month.index, year);
 
         this.description = null;
     }
@@ -94,7 +130,7 @@ public class SpreadsheetDayDate extends DayDate {
      * @param serial the serial number for the day (range: 2 to 2958465).
      */
     public SpreadsheetDayDate(int serial) {
-        if ((serial >= SERIAL_LOWER_BOUND) && (serial <= SERIAL_UPPER_BOUND)) {
+        if ((serial >= EARLIEST_DATE_ORDINAL) && (serial <= LATEST_DATE_ORDINAL)) {
             this.serial = serial;
         }
         else {
@@ -111,7 +147,7 @@ public class SpreadsheetDayDate extends DayDate {
      */
     private void calcDayMonthYear() {
         // get the year from the serial date
-        final int days = this.serial - SERIAL_LOWER_BOUND;
+        final int days = this.serial - EARLIEST_DATE_ORDINAL;
 
         // overestimated because we ignored leap days
         final int overestimatedYYYY = 1900 + (days / 365);
@@ -148,11 +184,11 @@ public class SpreadsheetDayDate extends DayDate {
             mm = mm + 1;
             sss = ss2 + daysToEndOfPrecedingMonth[mm] - 1;
         }
-        this.month = mm - 1;
+        this.month = Month.make(mm - 1);
 
         // what's left is d(+1);
         this.day = this.serial - ss2
-                - daysToEndOfPrecedingMonth[this.month] + 1;
+                - daysToEndOfPrecedingMonth[this.month.index] + 1;
     }
 
     /**
@@ -212,7 +248,7 @@ public class SpreadsheetDayDate extends DayDate {
      */
     @Override
     public int getMonth() {
-        return this.month;
+        return this.month.index;
     }
 
     /**

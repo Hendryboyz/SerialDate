@@ -92,19 +92,10 @@ public abstract class DayDate implements Comparable,
                     "Invalid month index " + monthIndex);
         }
     }
-    private static final long serialVersionUID = -293716040467423637L;
 
     public static final DateFormatSymbols
         DATE_FORMAT_SYMBOLS = new SimpleDateFormat("", Locale.ENGLISH)
             .getDateFormatSymbols();
-
-    public static final int SERIAL_LOWER_BOUND = 2;
-
-    public static final int SERIAL_UPPER_BOUND = 2958465;
-
-    public static final int MINIMUM_YEAR_SUPPORTED = 1900;
-
-    public static final int MAXIMUM_YEAR_SUPPORTED = 9999;
 
     public static final int MONDAY = Calendar.MONDAY;
 
@@ -648,7 +639,20 @@ public abstract class DayDate implements Comparable,
      */
     public static DayDate createInstance(final int day, final int month,
                                          final int yyyy) {
-        return new SpreadsheetDayDate(day, month, yyyy);
+        return DayDateFactory.makeDate(day, month, yyyy);
+    }
+
+    /**
+     * Factory method that returns a instance of some concrete subclass of
+     * {@link DayDate}
+     * @param day the day (1-31).
+     * @param month An instance of {@link Month} (JANUARY-DECEMBER).
+     * @param yyyy the year (in the range 1900 to 9999).
+     * @return An instance of {@link DayDate}
+     */
+    public static DayDate createInstance(final int day, final Month month,
+                                         final int yyyy) {
+        return DayDateFactory.makeDate(day, month, yyyy);
     }
 
     /**
@@ -658,7 +662,7 @@ public abstract class DayDate implements Comparable,
      * @return An instance of {@link DayDate}
      */
     public static DayDate createInstance(final int serial) {
-        return new SpreadsheetDayDate(serial);
+        return DayDateFactory.makeDate(serial);
     }
 
     /**
@@ -667,11 +671,7 @@ public abstract class DayDate implements Comparable,
      * @return a instance of DayDate
      */
     public static DayDate createInstance(final java.util.Date date) {
-        final GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        return new SpreadsheetDayDate(
-                calendar.get(Calendar.DATE), calendar.get(Calendar.MONDAY) + 1,
-                calendar.get(Calendar.YEAR));
+        return DayDateFactory.makeDate(date);
     }
 
     /**
