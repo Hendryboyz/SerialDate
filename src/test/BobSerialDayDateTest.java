@@ -11,71 +11,69 @@ import static main.Month.*;
 import static main.DayDate.*;
 
 public class BobSerialDayDateTest extends TestCase {
-
-//    public void testIsValidWeekdayCode() throws Exception {
-//        for (int day = 1; day <= 7; day++)
-//            assertTrue(isValidWeekdayCode(day));
-//        assertFalse(isValidWeekdayCode(0));
-//        assertFalse(isValidWeekdayCode(8));
-//    }
-
+    
     public void testStringToWeekdayCode() throws Exception {
 
-        assertEquals(-1, stringToWeekdayCode("Hello"));
+        try {
+            parse("Hello");
+            fail("Invalid Weekday Code should throw exception.");
+        } catch (IllegalArgumentException e) {
 
-        assertEquals(MONDAY.toInt(), stringToWeekdayCode("Monday"));
-        assertEquals(MONDAY.toInt(), stringToWeekdayCode("Mon"));
-        assertEquals(MONDAY.toInt(), stringToWeekdayCode("monday"));
-        assertEquals(MONDAY.toInt(), stringToWeekdayCode("MONDAY"));
-        assertEquals(MONDAY.toInt(), stringToWeekdayCode("mon"));
+        }
 
-        assertEquals(TUESDAY.toInt(), stringToWeekdayCode("Tuesday"));
-        assertEquals(TUESDAY.toInt(), stringToWeekdayCode("Tue"));
-        assertEquals(TUESDAY.toInt(), stringToWeekdayCode("tuesday"));
-        assertEquals(TUESDAY.toInt(), stringToWeekdayCode("TUESDAY"));
-        assertEquals(TUESDAY.toInt(), stringToWeekdayCode("tue"));
-//        assertEquals(Day.TUESDAY.toInt(), stringToWeekdayCode("tues"));
+        assertEquals(MONDAY, parse("Monday"));
+        assertEquals(MONDAY, parse("Mon"));
+        assertEquals(MONDAY, parse("monday"));
+        assertEquals(MONDAY, parse("MONDAY"));
+        assertEquals(MONDAY, parse("mon"));
 
-        assertEquals(WEDNESDAY.toInt(), stringToWeekdayCode("Wednesday"));
-        assertEquals(WEDNESDAY.toInt(), stringToWeekdayCode("Wed"));
-        assertEquals(WEDNESDAY.toInt(), stringToWeekdayCode("wednesday"));
-        assertEquals(WEDNESDAY.toInt(), stringToWeekdayCode("WEDNESDAY"));
-        assertEquals(WEDNESDAY.toInt(), stringToWeekdayCode("wed"));
+        assertEquals(TUESDAY, parse("Tuesday"));
+        assertEquals(TUESDAY, parse("Tue"));
+        assertEquals(TUESDAY, parse("tuesday"));
+        assertEquals(TUESDAY, parse("TUESDAY"));
+        assertEquals(TUESDAY, parse("tue"));
+//        assertEquals(Day.TUESDAY, parse("tues"));
 
-        assertEquals(THURSDAY.toInt(), stringToWeekdayCode("Thursday"));
-        assertEquals(THURSDAY.toInt(), stringToWeekdayCode("Thu"));
-        assertEquals(THURSDAY.toInt(), stringToWeekdayCode("thursday"));
-        assertEquals(THURSDAY.toInt(), stringToWeekdayCode("THURSDAY"));
-        assertEquals(THURSDAY.toInt(), stringToWeekdayCode("thu"));
-//        assertEquals(Day.THURSDAY.toInt(), stringToWeekdayCode("thurs"));
+        assertEquals(WEDNESDAY, parse("Wednesday"));
+        assertEquals(WEDNESDAY, parse("Wed"));
+        assertEquals(WEDNESDAY, parse("wednesday"));
+        assertEquals(WEDNESDAY, parse("WEDNESDAY"));
+        assertEquals(WEDNESDAY, parse("wed"));
 
-        assertEquals(FRIDAY.toInt(), stringToWeekdayCode("Friday"));
-        assertEquals(FRIDAY.toInt(), stringToWeekdayCode("Fri"));
-        assertEquals(FRIDAY.toInt(), stringToWeekdayCode("friday"));
-        assertEquals(FRIDAY.toInt(), stringToWeekdayCode("FRIDAY"));
-        assertEquals(FRIDAY.toInt(), stringToWeekdayCode("fri"));
+        assertEquals(THURSDAY, parse("Thursday"));
+        assertEquals(THURSDAY, parse("Thu"));
+        assertEquals(THURSDAY, parse("thursday"));
+        assertEquals(THURSDAY, parse("THURSDAY"));
+        assertEquals(THURSDAY, parse("thu"));
+//        assertEquals(Day.THURSDAY, parse("thurs"));
 
-        assertEquals(SATURDAY.toInt(), stringToWeekdayCode("Saturday"));
-        assertEquals(SATURDAY.toInt(), stringToWeekdayCode("Sat"));
-        assertEquals(SATURDAY.toInt(), stringToWeekdayCode("saturday"));
-        assertEquals(SATURDAY.toInt(), stringToWeekdayCode("SATURDAY"));
-        assertEquals(SATURDAY.toInt(), stringToWeekdayCode("sat"));
+        assertEquals(FRIDAY, parse("Friday"));
+        assertEquals(FRIDAY, parse("Fri"));
+        assertEquals(FRIDAY, parse("friday"));
+        assertEquals(FRIDAY, parse("FRIDAY"));
+        assertEquals(FRIDAY, parse("fri"));
 
-        assertEquals(SUNDAY.toInt(), stringToWeekdayCode("Sunday"));
-        assertEquals(SUNDAY.toInt(), stringToWeekdayCode("Sun"));
-        assertEquals(SUNDAY.toInt(), stringToWeekdayCode("sunday"));
-        assertEquals(SUNDAY.toInt(), stringToWeekdayCode("SUNDAY"));
-        assertEquals(SUNDAY.toInt(), stringToWeekdayCode("sun"));
+        assertEquals(SATURDAY, parse("Saturday"));
+        assertEquals(SATURDAY, parse("Sat"));
+        assertEquals(SATURDAY, parse("saturday"));
+        assertEquals(SATURDAY, parse("SATURDAY"));
+        assertEquals(SATURDAY, parse("sat"));
+
+        assertEquals(SUNDAY, parse("Sunday"));
+        assertEquals(SUNDAY, parse("Sun"));
+        assertEquals(SUNDAY, parse("sunday"));
+        assertEquals(SUNDAY, parse("SUNDAY"));
+        assertEquals(SUNDAY, parse("sun"));
     }
 
     public void testWeekdayCodeToString() throws Exception {
-        assertEquals("Sunday", weekdayCodeToString(SUNDAY.toInt()));
-        assertEquals("Monday", weekdayCodeToString(MONDAY.toInt()));
-        assertEquals("Tuesday", weekdayCodeToString(TUESDAY.toInt()));
-        assertEquals("Wednesday", weekdayCodeToString(WEDNESDAY.toInt()));
-        assertEquals("Thursday", weekdayCodeToString(THURSDAY.toInt()));
-        assertEquals("Friday", weekdayCodeToString(FRIDAY.toInt()));
-        assertEquals("Saturday", weekdayCodeToString(SATURDAY.toInt()));
+        assertEquals("Sunday", SUNDAY.toString());
+        assertEquals("Monday", MONDAY.toString());
+        assertEquals("Tuesday", TUESDAY.toString());
+        assertEquals("Wednesday", WEDNESDAY.toString());
+        assertEquals("Thursday", THURSDAY.toString());
+        assertEquals("Friday", FRIDAY.toString());
+        assertEquals("Saturday", SATURDAY.toString());
     }
 
     public void testMonthToQuarter() throws Exception {

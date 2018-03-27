@@ -103,65 +103,8 @@ public abstract class DayDate implements Comparable,
         }
     }
 
-    /**
-     * Converts the supplied string to a day of the week
-     * @param s a string representing the day of the week
-     * @return <code>-1</code> if the string is not convertable, the day of
-     *          the week otherwise.
-     */
-    public static int stringToWeekdayCode(String s) {
-        final String[] shortWeekdayNames =
-                DATE_FORMAT_SYMBOLS.getShortWeekdays();
-        final String[] weekDayNames = DATE_FORMAT_SYMBOLS.getWeekdays();
-
-        int result = -1;
-        s = s.trim();
-        for (int i = 0; i < weekDayNames.length; i++) {
-            if (s.equalsIgnoreCase(shortWeekdayNames[i])) {
-                result = i;
-                break;
-            }
-            if (s.equalsIgnoreCase(weekDayNames[i])) {
-                result = i;
-                break;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Returns a string representing the supplied day-of-the-week
-     * Need to find a better approach
-     * @param weekday the day of the week
-     * @return a string representing the supplied day-of-the-week
-     */
-    public static String weekdayCodeToString(final int weekday) {
-        final String[] weekdays = DATE_FORMAT_SYMBOLS.getWeekdays();
-        return weekdays[weekday];
-    }
-
-    /**
-     * Returns an array of month names
-     * @return an array of month names
-     */
-    public static String[] getMonths() {
-        return getMonths(false);
-    }
-
-    /**
-     * Returns an array of month names
-     * @param shortened a flag indicating that shortened month names should be returned
-     * @return an array of month names
-     */
-    public static String[] getMonths(final boolean shortened) {
-
-        if (shortened) {
-            return DATE_FORMAT_SYMBOLS.getShortMonths();
-        }
-        else {
-            return DATE_FORMAT_SYMBOLS.getMonths();
-        }
-
+    public static String[] getMonthNames() {
+        return DATE_FORMAT_SYMBOLS.getMonths();
     }
 
     /**
@@ -424,11 +367,11 @@ public abstract class DayDate implements Comparable,
         // find the date...
         final int adjust;
         final int baseDOW = base.getDayOfWeek();
-        if (baseDOW > targetWeekday.toInt()) {
-            adjust = Math.min(0, targetWeekday.toInt() - baseDOW);
+        if (baseDOW > targetWeekday.index) {
+            adjust = Math.min(0, targetWeekday.index - baseDOW);
         }
         else {
-            adjust = -7 + Math.max(0, targetWeekday.toInt() - baseDOW);
+            adjust = -7 + Math.max(0, targetWeekday.index - baseDOW);
         }
 
         return DayDate.addDays(adjust, base);
@@ -449,11 +392,11 @@ public abstract class DayDate implements Comparable,
         final int adjust;
         final int baseDOW = base.getDayOfWeek();
 
-        if (baseDOW >= targetWeekday.toInt()) {
-            adjust = 7 + Math.min(0, targetWeekday.toInt() - baseDOW);
+        if (baseDOW >= targetWeekday.index) {
+            adjust = 7 + Math.min(0, targetWeekday.index - baseDOW);
         }
         else {
-            adjust = Math.max(0, targetWeekday.toInt() - baseDOW);
+            adjust = Math.max(0, targetWeekday.index - baseDOW);
         }
 
         return DayDate.addDays(adjust, base);
@@ -471,7 +414,7 @@ public abstract class DayDate implements Comparable,
     public static DayDate getNearestDayOfWeek(final Day targetDOW,
                                               final DayDate base) {
         // find the date...
-        int delta = targetDOW.toInt() - base.getDayOfWeek();
+        int delta = targetDOW.index - base.getDayOfWeek();
         int positiveDelta = delta + 7;
         int adjust = positiveDelta % 7;
         if (adjust > 3)
@@ -691,7 +634,7 @@ public abstract class DayDate implements Comparable,
      *          is BEFORE this date
      */
     public DayDate getPreviousDayOfWeek(final int targetDOW) {
-        return getPreviousDayOfWeek(Day.fromInt(targetDOW), this);
+        return getPreviousDayOfWeek(Day.make(targetDOW), this);
     }
 
     /**
@@ -702,7 +645,7 @@ public abstract class DayDate implements Comparable,
      *          and is AFTER this date.
      */
     public DayDate getFollowingDayOfWeek(final int targetDOW) {
-        return getFollowingDayOfWeek(Day.fromInt(targetDOW), this);
+        return getFollowingDayOfWeek(Day.make(targetDOW), this);
     }
 
     /**
@@ -712,6 +655,6 @@ public abstract class DayDate implements Comparable,
      * @return the nearest date that falls on the specified day-of-the-week
      */
     public DayDate getNearestDayOfWeek(final int targetDOW) {
-        return getNearestDayOfWeek(Day.fromInt(targetDOW), this);
+        return getNearestDayOfWeek(Day.make(targetDOW), this);
     }
 }

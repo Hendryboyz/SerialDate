@@ -6,7 +6,6 @@ import junit.framework.TestSuite;
 import main.*;
 
 import static main.Day.*;
-import static main.DayDate.*;
 
 import java.io.*;
 
@@ -109,8 +108,7 @@ public class SerialDayDateTest extends TestCase {
      * result depends on the Locale so this test needs to be modified.
      */
     public void testWeekdayCodeToString() {
-        final String test = DayDate.weekdayCodeToString(SATURDAY.toInt());
-        assertEquals("Saturday", test);
+        assertEquals("Saturday", SATURDAY.toString());
     }
 
     /**
@@ -118,14 +116,11 @@ public class SerialDayDateTest extends TestCase {
      * default locale doesn't use English weekday names... devise a better test!
      */
     public void testStringToWeekday() {
-        int weekday = DayDate.stringToWeekdayCode("Wednesday");
-        assertEquals(WEDNESDAY.toInt(), weekday);
+        assertEquals(WEDNESDAY, Day.parse("Wednesday"));
 
-        weekday = DayDate.stringToWeekdayCode(" Wednesday ");
-        assertEquals(WEDNESDAY.toInt(), weekday);
+        assertEquals(WEDNESDAY, Day.parse(" Wednesday "));
 
-        weekday = DayDate.stringToWeekdayCode("Wed");
-        assertEquals(WEDNESDAY.toInt(), weekday);
+        assertEquals(WEDNESDAY, Day.parse("Wed"));
     }
 
     /**
