@@ -1,18 +1,10 @@
 package main;
 
 public enum Month {
-    JANUARY(1),
-    FEBRUARY(2),
-    MARCH(3),
-    APRIL(4),
-    MAY(5),
-    JUNE(6),
-    JULY(7),
-    AUGUST(8),
-    SEPTEMBER(9),
-    OCTOBER(10),
-    NOVEMBER(11),
-    DECEMBER(12);
+    JANUARY(1), FEBRUARY(2), MARCH(3), // season 1
+    APRIL(4), MAY(5), JUNE(6), // season 2
+    JULY(7), AUGUST(8), SEPTEMBER(9), // season 3
+    OCTOBER(10), NOVEMBER(11), DECEMBER(12); // season 4
 
     public final int index;
 
@@ -27,5 +19,9 @@ public enum Month {
         }
         throw new IllegalArgumentException(
                 "Invalid month index " + monthIndex);
+    }
+
+    public int quarter() {
+        return 1 + (index - 1)/3;
     }
 }

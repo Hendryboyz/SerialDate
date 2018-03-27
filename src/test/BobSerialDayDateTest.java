@@ -11,7 +11,7 @@ import static main.Month.*;
 import static main.DayDate.*;
 
 public class BobSerialDayDateTest extends TestCase {
-    
+
     public void testStringToWeekdayCode() throws Exception {
 
         try {
@@ -77,25 +77,18 @@ public class BobSerialDayDateTest extends TestCase {
     }
 
     public void testMonthToQuarter() throws Exception {
-        assertEquals(1, monthCodeToQuarter(JANUARY.index));
-        assertEquals(1, monthCodeToQuarter(FEBRUARY.index));
-        assertEquals(1, monthCodeToQuarter(MARCH.index));
-        assertEquals(2, monthCodeToQuarter(APRIL.index));
-        assertEquals(2, monthCodeToQuarter(MAY.index));
-        assertEquals(2, monthCodeToQuarter(JUNE.index));
-        assertEquals(3, monthCodeToQuarter(JULY.index));
-        assertEquals(3, monthCodeToQuarter(AUGUST.index));
-        assertEquals(3, monthCodeToQuarter(SEPTEMBER.index));
-        assertEquals(4, monthCodeToQuarter(OCTOBER.index));
-        assertEquals(4, monthCodeToQuarter(NOVEMBER.index));
-        assertEquals(4, monthCodeToQuarter(DECEMBER.index));
-
-        try {
-            monthCodeToQuarter(-1);
-            fail("Invalid Month Code should throw exception.");
-        } catch (IllegalArgumentException e) {
-
-        }
+        assertEquals(1, JANUARY.quarter());
+        assertEquals(1, FEBRUARY.quarter());
+        assertEquals(1, MARCH.quarter());
+        assertEquals(2, APRIL.quarter());
+        assertEquals(2, MAY.quarter());
+        assertEquals(2, JUNE.quarter());
+        assertEquals(3, JULY.quarter());
+        assertEquals(3, AUGUST.quarter());
+        assertEquals(3, SEPTEMBER.quarter());
+        assertEquals(4, OCTOBER.quarter());
+        assertEquals(4, NOVEMBER.quarter());
+        assertEquals(4, DECEMBER.quarter());
     }
 
     public void testMonthCodeToString() throws Exception {

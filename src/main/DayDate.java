@@ -108,32 +108,6 @@ public abstract class DayDate implements Comparable,
     }
 
     /**
-     * Returns the quarter for the specified month
-     * @param code the month code (1-12).
-     * @return the quarter that the month belongs to
-     * @throws java.lang.IllegalArgumentException
-     */
-    public static int monthCodeToQuarter(final int code) {
-
-        switch (Month.makeMonth(code)) {
-            case JANUARY:
-            case FEBRUARY:
-            case MARCH: return 1;
-            case APRIL:
-            case MAY:
-            case JUNE: return 2;
-            case JULY:
-            case AUGUST:
-            case SEPTEMBER: return 3;
-            case OCTOBER:
-            case NOVEMBER:
-            case DECEMBER: return 4;
-            default: return -1;
-        }
-
-    }
-
-    /**
      * Returns a string representing the supplied month.
      *
      * The string returned is the long form of the month name taken from the
