@@ -63,65 +63,7 @@ import java.util.*;
  */
 public abstract class DayDate implements Comparable,
                                     Serializable {
-    public static enum Month {
-        JANUARY(1),
-        FEBRUARY(2),
-        MARCH(3),
-        APRIL(4),
-        MAY(5),
-        JUNE(6),
-        JULY(7),
-        AUGUST(8),
-        SEPTEMBER(9),
-        OCTOBER(10),
-        NOVEMBER(11),
-        DECEMBER(12);
 
-        public final int index;
-
-        Month(int index) {
-            this.index = index;
-        }
-
-        public static Month make(int monthIndex) {
-            for (Month m : Month.values()) {
-                if (m.index == monthIndex)
-                    return m;
-            }
-            throw new IllegalArgumentException(
-                    "Invalid month index " + monthIndex);
-        }
-    }
-
-    public static enum Day {
-        MONDAY(Calendar.MONDAY),
-        TUESDAY(Calendar.TUESDAY),
-        WEDNESDAY(Calendar.WEDNESDAY),
-        THURSDAY(Calendar.THURSDAY),
-        FRIDAY(Calendar.FRIDAY),
-        SATURDAY(Calendar.SATURDAY),
-        SUNDAY(Calendar.SUNDAY);
-
-        private final int index;
-        private  static DateFormatSymbols dateFormatSymbols
-                = new DateFormatSymbols(Locale.ENGLISH);
-        Day(int day) {
-            index = day;
-        }
-
-        public static Day fromInt(int index) throws IllegalArgumentException {
-            for (Day d : Day.values()) {
-                if (d.index == index)
-                    return d;
-            }
-            throw new IllegalArgumentException(
-                    String.format("Illegal day index: %d", index));
-        }
-
-        public int toInt() {
-            return index;
-        }
-    }
 
     public static final DateFormatSymbols
         DATE_FORMAT_SYMBOLS = new SimpleDateFormat("", Locale.ENGLISH)
@@ -130,34 +72,36 @@ public abstract class DayDate implements Comparable,
     private static final int[] LAST_DAY_OF_MONTH =
             {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-    public static final int FIRST_WEEK_IN_MONTH = 1;
+    public static enum WeekInMonth {
+        FIRST(1), SECOND(2), THIRD(3), FOURTH(4), LAST(0);
+        public final int index;
 
-    public static final int SECOND_WEEK_IN_MONTH = 2;
+        WeekInMonth(int index){
+            this.index = index;
+        }
 
-    public static final int THIRD_WEEK_IN_MONTH = 3;
+        public int toInt() {
+            return index;
+        }
+    }
 
-    public static final int FOURTH_WEEK_IN_MONTH = 4;
+    public static enum DateInterval {
+        CLOSED(1), CLOSED_LEFT(2), CLOSED_RIGHT(2), OPEN(3);
+        public final int index;
 
-    public static final int LAST_WEEK_IN_MONTH = 0;
+        DateInterval(int index){
+            this.index = index;
+        }
+    }
 
-    public static final int INCLUDE_NONE = 0;
+    public static enum WeekdayRange {
+        LAST(-1), NEAREST(0), NEXT(1);
+        public final int index;
 
-    public static final int INCLUDE_FIRST = 1;
-
-    public static final int INCLUDE_SECOND = 2;
-
-    public static final int INCLUDE_BOTH = 3;
-
-    public static final int PRECEDING = -1;
-
-    public static final int NEAREST = 0;
-
-    public static final int FOLLOWING = 1;
-
-    private String description;
-
-    /** Default Constructor */
-    protected DayDate() {}
+        WeekdayRange(int index){
+            this.index = index;
+        }
+    }
 
     /**
      * Converts the supplied string to a day of the week
@@ -228,7 +172,7 @@ public abstract class DayDate implements Comparable,
      */
     public static int monthCodeToQuarter(final int code) {
 
-        switch (Month.make(code)) {
+        switch (Month.makeMonth(code)) {
             case JANUARY:
             case FEBRUARY:
             case MARCH: return 1;
@@ -336,17 +280,17 @@ public abstract class DayDate implements Comparable,
      * @return <code>true</code> if the supplied integer code represents a
      *          valid week-in-the-month.
      */
-    public static boolean isValidWeekInMonthCode(final int code) {
-
-        switch (code) {
-            case FIRST_WEEK_IN_MONTH:
-            case SECOND_WEEK_IN_MONTH:
-            case THIRD_WEEK_IN_MONTH:
-            case FOURTH_WEEK_IN_MONTH: return true;
-            default : return false;
-        }
-
-    }
+//    public static boolean isValidWeekInMonthCode(final int code) {
+//
+//        switch (code) {
+//            case FIRST_WEEK_IN_MONTH:
+//            case SECOND_WEEK_IN_MONTH:
+//            case THIRD_WEEK_IN_MONTH:
+//            case FOURTH_WEEK_IN_MONTH: return true;
+//            default : return false;
+//        }
+//
+//    }
 
     /**
      * Determines whether or not the specified year is a leap year.
@@ -439,7 +383,7 @@ public abstract class DayDate implements Comparable,
         final int mm = (12 * base.getYYYY() + base.getMonth() + months - 1) % 12 + 1;
 
         final int dd = Math.min(
-                base.getDayOfMonth(), DayDate.lastDayOfMonth(Month.make(mm), yy)
+                base.getDayOfMonth(), DayDate.lastDayOfMonth(Month.makeMonth(mm), yy)
         );
         return DayDate.createInstance(dd, mm, yy);
 
@@ -460,7 +404,7 @@ public abstract class DayDate implements Comparable,
 
         final int targetY = baseY + years;
         final int targetD = Math.min(
-                baseD, DayDate.lastDayOfMonth(Month.make(baseM), targetY)
+                baseD, DayDate.lastDayOfMonth(Month.makeMonth(baseM), targetY)
         );
 
         return DayDate.createInstance(targetD, baseM, targetY);
@@ -544,51 +488,29 @@ public abstract class DayDate implements Comparable,
      */
     public DayDate getEndOfCurrentMonth(final DayDate base) {
         final int last = DayDate.lastDayOfMonth(
-                Month.make(base.getMonth()), base.getYYYY()
+                Month.makeMonth(base.getMonth()), base.getYYYY()
         );
         return DayDate.createInstance(last, base.getMonth(), base.getYYYY());
     }
 
-    /**
-     * Returns a string corresponding to the week-in-the-month code.
-     * <P>
-     *     Need to find a better approach
-     * </P>
-     * @param count an integer code representing the week-in-the-month-code.
-     * @return a string corresponding to the week-in-the-month code.
-     */
-    public static String weekInMonthToString(final int count) {
-
-        switch (count) {
-            case DayDate.FIRST_WEEK_IN_MONTH: return "First";
-            case DayDate.SECOND_WEEK_IN_MONTH : return "Second";
-            case DayDate.THIRD_WEEK_IN_MONTH : return "Third";
-            case DayDate.FOURTH_WEEK_IN_MONTH : return "Fourth";
-            case DayDate.LAST_WEEK_IN_MONTH : return "Last";
-            default:
-                return "DayDate.weekInMonthToString(): invalid code.";
-        }
-
-    }
-
-    /**
-     * Returns a string representing the supplied 'relative'
-     * <P>
-     *     Need to find ad better approach
-     * </P>
-     * @param relative a constant representing the 'relative'
-     * @return a string representing the supplied 'relative'
-     */
-    public static String relativeToString(final int relative) {
-
-        switch (relative) {
-            case DayDate.PRECEDING : return "Preceding";
-            case DayDate.NEAREST: return "Nearest";
-            case DayDate.FOLLOWING : return "Following";
-            default: return "ERROR: Relative To String";
-        }
-
-    }
+//    /**
+//     * Returns a string representing the supplied 'relative'
+//     * <P>
+//     *     Need to find ad better approach
+//     * </P>
+//     * @param relative a constant representing the 'relative'
+//     * @return a string representing the supplied 'relative'
+//     */
+//    public static String relativeToString(final int relative) {
+//
+//        switch (relative) {
+//            case DayDate.PRECEDING : return "Preceding";
+//            case DayDate.NEAREST: return "Nearest";
+//            case DayDate.FOLLOWING : return "Following";
+//            default: return "ERROR: Relative To String";
+//        }
+//
+//    }
 
     /**
      * Factory method that returns a instance of some concrete subclass of
@@ -650,29 +572,12 @@ public abstract class DayDate implements Comparable,
      */
     public abstract java.util.Date toDate();
 
-
-    /**
-     * Returns a description of the date
-     * @return a description of the date
-     */
-    public String getDescription() {
-        return this.description;
-    }
-
-    /**
-     * Sets the description for the date
-     * @param description the new description for the date
-     */
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
     /**
      * Converts the date to a string.
      * @return a string representation of the date.
      */
     public String toString() {
-        return getDayOfMonth() + "-" + DayDate.monthCodeToString(Month.make(getMonth()))
+        return getDayOfMonth() + "-" + DayDate.monthCodeToString(Month.makeMonth(getMonth()))
                                 + "-" + getYYYY();
     }
 
@@ -776,7 +681,7 @@ public abstract class DayDate implements Comparable,
      * @return A boolean
      */
     public abstract boolean isInRange(DayDate d1, DayDate d2,
-                                      int include);
+                                      DateInterval include);
 
     /**
      * Returns the latest date that falls on the specified day-of-the-week and

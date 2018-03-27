@@ -52,6 +52,7 @@ package main;
  *
  * @author David Gilbert
  */
+import static main.DayDate.*;
 public class RelativeDayOfWeekRule extends AnnualDateRule {
 
     /** A reference to the annual date rule on which this rule is based */
@@ -60,16 +61,16 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
     /**
      * The day of the week (SerialDate.MONDAY, SerialDate.TUESDAY, and so on).
      */
-    private DayDate.Day dayOfWeek;
+    private Day dayOfWeek;
 
     /** Specifies which day of the week (PRECEDING, NEAREST or FOLLOWING). */
-    private int relative;
+    private WeekdayRange relative;
 
     /**
      * Default constructor - builds rule based on the supplied sub-rule
      */
     public RelativeDayOfWeekRule() {
-        this(new DayAndMonthRule(), DayDate.Day.MONDAY, DayDate.FOLLOWING);
+        this(new DayAndMonthRule(), Day.MONDAY, WeekdayRange.NEXT);
     }
 
     /**
@@ -80,7 +81,7 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
      * @param relative indicates *which* day-of-the-week (preceding, nearest or following).
      */
     public RelativeDayOfWeekRule(final AnnualDateRule subrule,
-                                 final DayDate.Day dayOfWeek, final int relative) {
+                                 final Day dayOfWeek, final WeekdayRange relative) {
         this.subrule = subrule;
         this.dayOfWeek = dayOfWeek;
         this.relative = relative;
@@ -111,7 +112,7 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
      *
      * @return the day-of-the-week for this rule.
      */
-    public DayDate.Day getDayOfWeek() {
+    public Day getDayOfWeek() {
         return this.dayOfWeek;
     }
 
@@ -121,7 +122,7 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
      * @param dayOfWeek  the day-of-the-week (SerialDate.MONDAY,
      *                   SerialDate.TUESDAY, and so on).
      */
-    public void setDayOfWeek(final DayDate.Day dayOfWeek) {
+    public void setDayOfWeek(final Day dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
 
@@ -132,7 +133,7 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
      *
      * @return The 'relative' attribute.
      */
-    public int getRelative() {
+    public WeekdayRange getRelative() {
         return this.relative;
     }
 
@@ -143,7 +144,7 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
      * @param relative  determines *which* day-of-the-week is selected by this
      *                  rule.
      */
-    public void setRelative(final int relative) {
+    public void setRelative(final WeekdayRange relative) {
         this.relative = relative;
     }
 
@@ -186,18 +187,14 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
         final DayDate base = this.subrule.getDate(year);
 
         if (base != null) {
-            switch (this.relative) {
-                case (DayDate.PRECEDING):
-                    result = DayDate.getPreviousDayOfWeek(this.dayOfWeek, base);
-                    break;
-                case (DayDate.NEAREST):
-                    result = DayDate.getNearestDayOfWeek(this.dayOfWeek, base);
-                    break;
-                case (DayDate.FOLLOWING):
-                    result = DayDate.getFollowingDayOfWeek(this.dayOfWeek, base);
-                    break;
-                default:
-                    break;
+            if (this.relative == WeekdayRange.LAST) {
+                result = DayDate.getPreviousDayOfWeek(this.dayOfWeek, base);
+            }
+            else if (this.relative == WeekdayRange.NEAREST) {
+                result = DayDate.getNearestDayOfWeek(this.dayOfWeek, base);
+            }
+            else if (this.relative == WeekdayRange.NEXT) {
+                result = DayDate.getFollowingDayOfWeek(this.dayOfWeek, base);
             }
         }
         return result;

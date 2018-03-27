@@ -57,7 +57,7 @@ public class SpreadsheetDayDate extends DayDate {
 
         if ((month >= Month.JANUARY.index)
                 && (month <= Month.DECEMBER.index)) {
-            this.month = Month.make(month);
+            this.month = Month.makeMonth(month);
         }
         else {
             throw new IllegalArgumentException(
@@ -65,7 +65,7 @@ public class SpreadsheetDayDate extends DayDate {
             );
         }
 
-        if ((day >= 1) && (day <= DayDate.lastDayOfMonth(Month.make(month), year))) {
+        if ((day >= 1) && (day <= DayDate.lastDayOfMonth(Month.makeMonth(month), year))) {
             this.day = day;
         }
         else {
@@ -190,7 +190,7 @@ public class SpreadsheetDayDate extends DayDate {
             mm = mm + 1;
             sss = ss2 + daysToEndOfPrecedingMonth[mm] - 1;
         }
-        this.month = Month.make(mm - 1);
+        this.month = Month.makeMonth(mm - 1);
 
         // what's left is d(+1);
         this.day = this.serial - ss2
@@ -203,7 +203,6 @@ public class SpreadsheetDayDate extends DayDate {
      * is useful
      * @return The description that is attached to the date.
      */
-    @Override
     public String getDescription() {
         return this.description;
     }
@@ -402,7 +401,7 @@ public class SpreadsheetDayDate extends DayDate {
      */
     @Override
     public boolean isInRange(DayDate d1, DayDate d2) {
-        return isInRange(d1, d2, DayDate.INCLUDE_BOTH);
+        return isInRange(d1, d2, DateInterval.OPEN);
     }
 
     /**
@@ -416,20 +415,20 @@ public class SpreadsheetDayDate extends DayDate {
      * @return <code>true</code> if this DayDate is within the specified range.
      */
     @Override
-    public boolean isInRange(DayDate d1, DayDate d2, int include) {
+    public boolean isInRange(DayDate d1, DayDate d2, DateInterval include) {
         final int s1 = d1.toSerial();
         final int s2 = d2.toSerial();
         final int start = Math.min(s1, s2);
         final int end = Math.max(s1, s2);
 
         final int s = toSerial();
-        if (include == DayDate.INCLUDE_BOTH) {
+        if (include == DateInterval.OPEN) {
             return (s >= start && s <= end);
         }
-        else if (include == DayDate.INCLUDE_FIRST) {
+        else if (include == DateInterval.CLOSED_LEFT) {
             return (s >= start && s < end);
         }
-        else if (include == DayDate.INCLUDE_SECOND) {
+        else if (include == DateInterval.CLOSED_RIGHT) {
             return (s > start && s <= end);
         }
         else {
