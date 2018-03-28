@@ -369,19 +369,19 @@ public class BobSerialDayDateTest extends TestCase {
 
     public void testEndOfCurrentMonth() throws Exception {
         DayDate d = DayDate.makeDate(2);
-        assertEquals(d(31, JANUARY.index, 2006), d.getEndOfCurrentMonth(d(1, JANUARY.index, 2006)));
-        assertEquals(d(28, FEBRUARY.index, 2006), d.getEndOfCurrentMonth(d(1, FEBRUARY.index, 2006)));
-        assertEquals(d(31, MARCH.index, 2006), d.getEndOfCurrentMonth(d(1, MARCH.index, 2006)));
-        assertEquals(d(30, APRIL.index, 2006), d.getEndOfCurrentMonth(d(1, APRIL.index, 2006)));
-        assertEquals(d(31, MAY.index, 2006), d.getEndOfCurrentMonth(d(1, MAY.index, 2006)));
-        assertEquals(d(30, JUNE.index, 2006), d.getEndOfCurrentMonth(d(1, JUNE.index, 2006)));
-        assertEquals(d(31, JULY.index, 2006), d.getEndOfCurrentMonth(d(1, JULY.index, 2006)));
-        assertEquals(d(31, AUGUST.index, 2006), d.getEndOfCurrentMonth(d(1, AUGUST.index, 2006)));
-        assertEquals(d(30, SEPTEMBER.index, 2006), d.getEndOfCurrentMonth(d(1, SEPTEMBER.index, 2006)));
-        assertEquals(d(31, OCTOBER.index, 2006), d.getEndOfCurrentMonth(d(1, OCTOBER.index, 2006)));
-        assertEquals(d(30, NOVEMBER.index, 2006), d.getEndOfCurrentMonth(d(1, NOVEMBER.index, 2006)));
-        assertEquals(d(31, DECEMBER.index, 2006), d.getEndOfCurrentMonth(d(1, DECEMBER.index, 2006)));
-        assertEquals(d(29, FEBRUARY.index, 2008), d.getEndOfCurrentMonth(d(1, FEBRUARY.index, 2008)));
+        assertEquals(d(31, JANUARY.index, 2006), d(1, JANUARY.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(28, FEBRUARY.index, 2006), d(1, FEBRUARY.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(31, MARCH.index, 2006), d(1, MARCH.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(30, APRIL.index, 2006), d(1, APRIL.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(31, MAY.index, 2006), d(1, MAY.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(30, JUNE.index, 2006), d(1, JUNE.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(31, JULY.index, 2006), d(1, JULY.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(31, AUGUST.index, 2006), d(1, AUGUST.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(30, SEPTEMBER.index, 2006), d(1, SEPTEMBER.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(31, OCTOBER.index, 2006), d(1, OCTOBER.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(30, NOVEMBER.index, 2006), d(1, NOVEMBER.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(31, DECEMBER.index, 2006), d(1, DECEMBER.index, 2006).getEndOfCurrentMonth());
+        assertEquals(d(29, FEBRUARY.index, 2008), d(1, FEBRUARY.index, 2008).getEndOfCurrentMonth());
     }
 
     public void testRelativeToString() throws Exception {
@@ -399,7 +399,7 @@ public class BobSerialDayDateTest extends TestCase {
     public void testCreateInstanceFromDDMMYYYY() throws Exception {
         DayDate dayDate = makeDate(1, JANUARY.index, 1900);
         assertEquals(1, dayDate.getDayOfMonth());
-        assertEquals(JANUARY.index, dayDate.getMonth());
+        assertEquals(JANUARY, dayDate.getMonth());
         assertEquals(1900, dayDate.getYear());
         assertEquals(2, dayDate.toOrdinal());
     }

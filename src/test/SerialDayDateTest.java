@@ -6,8 +6,7 @@ import junit.framework.TestSuite;
 import main.*;
 
 import static main.Day.*;
-import static main.Month.parseMonth;
-
+import static main.Month.*;
 import java.io.*;
 
 public class SerialDayDateTest extends TestCase {
@@ -234,17 +233,17 @@ public class SerialDayDateTest extends TestCase {
 
         DayDate d2 = d1.plusMonths(1);
         assertEquals(30, d2.getDayOfMonth());
-        assertEquals(6, d2.getMonth());
+        assertEquals(JUNE, d2.getMonth());
         assertEquals(2004, d2.getYear());
 
         DayDate d3 = d1.plusMonths(2);
         assertEquals(31, d3.getDayOfMonth());
-        assertEquals(7, d3.getMonth());
+        assertEquals(JULY, d3.getMonth());
         assertEquals(2004, d3.getYear());
 
         DayDate d4 = d1.plusMonths(1).plusMonths(1);
         assertEquals(30, d4.getDayOfMonth());
-        assertEquals(7, d4.getMonth());
+        assertEquals(JULY, d4.getMonth());
         assertEquals(2004, d4.getYear());
     }
 }

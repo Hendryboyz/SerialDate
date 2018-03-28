@@ -137,7 +137,7 @@ public abstract class DayDate implements Comparable,
     }
 
     public DayDate plusMonths(final int months) {
-        int thisMonthAsOrdinal = 12 * getYear() + getMonth() - 1;
+        int thisMonthAsOrdinal = 12 * getYear() + getMonth().index - 1;
         int resultMonthAsOrdinal = thisMonthAsOrdinal + months;
         int resultYear = resultMonthAsOrdinal / 12;
         int resultMonth = Month.makeMonth(resultMonthAsOrdinal % 12 + 1).index;
@@ -151,7 +151,7 @@ public abstract class DayDate implements Comparable,
     public DayDate plusYear(int years) {
         int resultYear = getYear() + years;
         int lastDayOfMonthInResultYear =
-                DayDate.lastDayOfMonth(Month.makeMonth(getMonth()), resultYear);
+                lastDayOfMonth(getMonth(), resultYear);
         int resultDay =
                 Math.min(getDayOfMonth(), lastDayOfMonthInResultYear);
 
@@ -188,14 +188,13 @@ public abstract class DayDate implements Comparable,
 
     /**
      * Rolls the date forward to the last day of the month
-     * @param base the base date
      * @return a new serial date
      */
-    public DayDate getEndOfCurrentMonth(final DayDate base) {
-        final int last = DayDate.lastDayOfMonth(
-                Month.makeMonth(base.getMonth()), base.getYear()
-        );
-        return DayDate.makeDate(last, base.getMonth(), base.getYear());
+    public DayDate getEndOfCurrentMonth() {
+        Month month = getMonth();
+        int year = getYear();
+        int lastDay = lastDayOfMonth(month, year);
+        return DayDateFactory.makeDate(lastDay, month, year);
     }
 
     /**
@@ -263,7 +262,7 @@ public abstract class DayDate implements Comparable,
      * @return a string representation of the date.
      */
     public String toString() {
-        return getDayOfMonth() + "-" + Month.makeMonth(getMonth()).toString()
+        return getDayOfMonth() + "-" + getMonth().toString()
                                 + "-" + getYear();
     }
 
@@ -277,7 +276,7 @@ public abstract class DayDate implements Comparable,
      * Returns the month (January = 1, February = 2, March = 3).
      * @return the month of the year.
      */
-    public abstract int getMonth();
+    public abstract Month getMonth();
 
     /**
      * Returns the day of the month.
