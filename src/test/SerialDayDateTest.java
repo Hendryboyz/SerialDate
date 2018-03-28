@@ -35,15 +35,15 @@ public class SerialDayDateTest extends TestCase {
      * Problem set up.
      */
     protected void setUp() {
-        this.nov9Y2001 = DayDate.createInstance(9, Month.NOVEMBER.index, 2001);
+        this.nov9Y2001 = DayDate.makeDate(9, Month.NOVEMBER.index, 2001);
     }
 
     /**
      * 9 Nov 2001 plus two months should be 9 Jun 2002.
      */
     public void testAddMonthsTo9Nov2001() {
-        final DayDate jan9Y2002 = DayDate.addMonths(2, this.nov9Y2001);
-        final DayDate answer = DayDate.createInstance(9, 1, 2002);
+        final DayDate jan9Y2002 = this.nov9Y2001.addMonths(2);
+        final DayDate answer = DayDate.makeDate(9, 1, 2002);
         assertEquals(answer, jan9Y2002);
     }
 
@@ -51,17 +51,17 @@ public class SerialDayDateTest extends TestCase {
      * A test case for a reported bug, now fixed
      */
     public void testAddMonthsTo5Oct2003() {
-        final DayDate d1 = DayDate.createInstance(5, Month.OCTOBER.index, 2003);
-        final DayDate d2 = DayDate.addMonths(2, d1);
-        assertEquals(d2, DayDate.createInstance(5, Month.DECEMBER.index, 2003));
+        final DayDate d1 = DayDate.makeDate(5, Month.OCTOBER.index, 2003);
+        final DayDate d2 = d1.addMonths(2);
+        assertEquals(d2, DayDate.makeDate(5, Month.DECEMBER.index, 2003));
     }
 
     /**
      * A test case for a reported bug, now fixed
      */
     public void testAddMonthsTo1Jan2003() {
-        final DayDate d1 = DayDate.createInstance(1, Month.JANUARY.index, 2003);
-        final DayDate d2 = DayDate.addMonths(0, d1);
+        final DayDate d1 = DayDate.makeDate(1, Month.JANUARY.index, 2003);
+        final DayDate d2 = d1.addMonths(0);
         assertEquals(d2, d1);
     }
 
@@ -99,7 +99,7 @@ public class SerialDayDateTest extends TestCase {
      * The Monday nearest to 22 nd January 1940 falls on the 19th.
      */
     public void testMondayNearest22Jan1970() {
-        DayDate jan22Y1970 = DayDate.createInstance(22, Month.JANUARY.index, 1970);
+        DayDate jan22Y1970 = DayDate.makeDate(22, Month.JANUARY.index, 1970);
         DayDate mondayNearest = DayDate.getNearestDayOfWeek(MONDAY, jan22Y1970);
         assertEquals(19, mondayNearest.getDayOfMonth());
     }
@@ -197,7 +197,7 @@ public class SerialDayDateTest extends TestCase {
      */
     public void testSerialization() {
 
-        DayDate d1 = DayDate.createInstance(15, 4, 2000);
+        DayDate d1 = DayDate.makeDate(15, 4, 2000);
         DayDate d2 = null;
 
         try {
@@ -223,9 +223,9 @@ public class SerialDayDateTest extends TestCase {
      * A test for bug report 1096282 (now fixed).
      */
     public void test1096282() {
-        DayDate d = DayDate.createInstance(29, 2, 2004);
-        d = DayDate.addYears(1, d);
-        DayDate expected = DayDate.createInstance(28, 2, 2005);
+        DayDate d = DayDate.makeDate(29, 2, 2004);
+        d = d.plusYear(1);
+        DayDate expected = DayDate.makeDate(28, 2, 2005);
         assertTrue(d.isOn(expected));
     }
 
@@ -233,21 +233,21 @@ public class SerialDayDateTest extends TestCase {
      * Miscellaneous tests for add Months() method
      */
     public void testAddMonths() {
-        DayDate d1 = DayDate.createInstance(31, 5, 2004);
+        DayDate d1 = DayDate.makeDate(31, 5, 2004);
 
-        DayDate d2 = DayDate.addMonths(1, d1);
+        DayDate d2 = d1.addMonths(1);
         assertEquals(30, d2.getDayOfMonth());
         assertEquals(6, d2.getMonth());
-        assertEquals(2004, d2.getYYYY());
+        assertEquals(2004, d2.getYear());
 
-        DayDate d3 = DayDate.addMonths(2, d1);
+        DayDate d3 = d1.addMonths(2);
         assertEquals(31, d3.getDayOfMonth());
         assertEquals(7, d3.getMonth());
-        assertEquals(2004, d3.getYYYY());
+        assertEquals(2004, d3.getYear());
 
-        DayDate d4 = DayDate.addMonths(1, DayDate.addMonths(1, d1));
+        DayDate d4 = d1.addMonths(1).addMonths(1);
         assertEquals(30, d4.getDayOfMonth());
         assertEquals(7, d4.getMonth());
-        assertEquals(2004, d4.getYYYY());
+        assertEquals(2004, d4.getYear());
     }
 }

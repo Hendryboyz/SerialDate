@@ -131,63 +131,31 @@ public abstract class DayDate implements Comparable,
             return month.lastDay();
         }
     }
-
-    /**
-     * Creates a new date by adding the specified number of days to the base date
-     * @param days the number of days to add (can be negative)
-     * @param base the base date
-     * @return a new date
-     */
-    public static DayDate addDays(final int days, final DayDate base) {
-
-        final int serialDayNumber = base.toSerial() + days;
-        return DayDate.createInstance(serialDayNumber);
+    
+    public DayDate addDays(int days) {
+        return DayDateFactory.makeDate(toOrdinal() + days);
     }
 
-    /**
-     * Creates a new date by adding the specified number of months to the base
-     * date.
-     * <P>
-     *     If the base date is close to the  end of the month, the day on the result
-     *     may be adjusted slightly: 31 May + 1 month = 30 June.
-     * </P>
-     * @param months the number of months to add (can be negative).
-     * @param base the base date
-     * @return a new date
-     */
-    public static DayDate addMonths(final int months,
-                                    final DayDate base) {
-
-        final int yy = (12 * base.getYYYY() + base.getMonth() + months - 1) / 12;
-
-        final int mm = (12 * base.getYYYY() + base.getMonth() + months - 1) % 12 + 1;
-
-        final int dd = Math.min(
-                base.getDayOfMonth(), DayDate.lastDayOfMonth(Month.makeMonth(mm), yy)
-        );
-        return DayDate.createInstance(dd, mm, yy);
+    public DayDate addMonths(final int months) {
+        int thisMonthAsOrdinal = 12 * getYear() + getMonth() - 1;
+        int resultMonthAsOrdinal = thisMonthAsOrdinal + months;
+        int resultYear = resultMonthAsOrdinal / 12;
+        int resultMonth = Month.makeMonth(resultMonthAsOrdinal % 12 + 1).index;
+        int lastDayOfResultMonth =
+                DayDate.lastDayOfMonth(Month.makeMonth(resultMonth), resultYear);
+        int resultDay = Math.min(getDayOfMonth(), lastDayOfResultMonth);
+        return DayDateFactory.makeDate(resultDay, resultMonth, resultYear);
 
     }
 
-    /**
-     * Creates a new date by adding the specified number of years to the base
-     * date.
-     * @param years years the number of years to add (can be negative).
-     * @param base the base date
-     * @return a new date
-     */
-    public static DayDate addYears(final int years, final DayDate base) {
+    public DayDate plusYear(int years) {
+        int resultYear = getYear() + years;
+        int lastDayOfMonthInResultYear =
+                DayDate.lastDayOfMonth(Month.makeMonth(getMonth()), resultYear);
+        int resultDay =
+                Math.min(getDayOfMonth(), lastDayOfMonthInResultYear);
 
-        final int baseY = base.getYYYY();
-        final int baseM = base.getMonth();
-        final int baseD = base.getDayOfMonth();
-
-        final int targetY = baseY + years;
-        final int targetD = Math.min(
-                baseD, DayDate.lastDayOfMonth(Month.makeMonth(baseM), targetY)
-        );
-
-        return DayDate.createInstance(targetD, baseM, targetY);
+        return DayDateFactory.makeDate(resultDay, getMonth(), resultYear);
 
     }
 
@@ -211,7 +179,7 @@ public abstract class DayDate implements Comparable,
             adjust = -7 + Math.max(0, targetWeekday.index - baseDOW);
         }
 
-        return DayDate.addDays(adjust, base);
+        return base.addDays(adjust);
     }
 
     /**
@@ -236,7 +204,7 @@ public abstract class DayDate implements Comparable,
             adjust = Math.max(0, targetWeekday.index - baseDOW);
         }
 
-        return DayDate.addDays(adjust, base);
+        return base.addDays(adjust);
 
     }
 
@@ -257,7 +225,7 @@ public abstract class DayDate implements Comparable,
         if (adjust > 3)
             adjust -= 7;
 
-        return DayDate.addDays(adjust, base);
+        return base.addDays(adjust);
 
     }
 
@@ -268,9 +236,9 @@ public abstract class DayDate implements Comparable,
      */
     public DayDate getEndOfCurrentMonth(final DayDate base) {
         final int last = DayDate.lastDayOfMonth(
-                Month.makeMonth(base.getMonth()), base.getYYYY()
+                Month.makeMonth(base.getMonth()), base.getYear()
         );
-        return DayDate.createInstance(last, base.getMonth(), base.getYYYY());
+        return DayDate.makeDate(last, base.getMonth(), base.getYear());
     }
 
 //    /**
@@ -300,8 +268,8 @@ public abstract class DayDate implements Comparable,
      * @param yyyy the year (in the range 1900 to 9999).
      * @return An instance of {@link DayDate}
      */
-    public static DayDate createInstance(final int day, final int month,
-                                         final int yyyy) {
+    public static DayDate makeDate(final int day, final int month,
+                                   final int yyyy) {
         return DayDateFactory.makeDate(day, month, yyyy);
     }
 
@@ -313,8 +281,8 @@ public abstract class DayDate implements Comparable,
      * @param yyyy the year (in the range 1900 to 9999).
      * @return An instance of {@link DayDate}
      */
-    public static DayDate createInstance(final int day, final Month month,
-                                         final int yyyy) {
+    public static DayDate makeDate(final int day, final Month month,
+                                   final int yyyy) {
         return DayDateFactory.makeDate(day, month, yyyy);
     }
 
@@ -324,7 +292,7 @@ public abstract class DayDate implements Comparable,
      * @param serial date A Java date object
      * @return An instance of {@link DayDate}
      */
-    public static DayDate createInstance(final int serial) {
+    public static DayDate makeDate(final int serial) {
         return DayDateFactory.makeDate(serial);
     }
 
@@ -333,7 +301,7 @@ public abstract class DayDate implements Comparable,
      * @param date A Java date object
      * @return a instance of DayDate
      */
-    public static DayDate createInstance(final java.util.Date date) {
+    public static DayDate makeDate(final java.util.Date date) {
         return DayDateFactory.makeDate(date);
     }
 
@@ -343,7 +311,7 @@ public abstract class DayDate implements Comparable,
      * Windows and Lotus 1-2-3).
      * @return the serial number for the date
      */
-    public abstract int toSerial();
+    public abstract int toOrdinal();
 
     /**
      * Returns a java.util.DayDate. Since java.util.DayDate has more precision than
@@ -358,14 +326,14 @@ public abstract class DayDate implements Comparable,
      */
     public String toString() {
         return getDayOfMonth() + "-" + Month.makeMonth(getMonth()).toString()
-                                + "-" + getYYYY();
+                                + "-" + getYear();
     }
 
     /**
      * Returns the year (assume a valid range of 1900 to 9999).
      * @return the year.
      */
-    public abstract int getYYYY();
+    public abstract int getYear();
 
     /**
      * Returns the month (January = 1, February = 2, March = 3).
