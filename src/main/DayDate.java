@@ -69,9 +69,6 @@ public abstract class DayDate implements Comparable,
         DATE_FORMAT_SYMBOLS = new SimpleDateFormat("", Locale.ENGLISH)
             .getDateFormatSymbols();
 
-    private static final int[] LAST_DAY_OF_MONTH =
-            {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
     public static enum WeekInMonth {
         FIRST(1), SECOND(2), THIRD(3), FOURTH(4), LAST(0);
         public final int index;
@@ -126,17 +123,12 @@ public abstract class DayDate implements Comparable,
      * @param yyyy the year (in the range 1900 to 9999).
      * @return the number of the last day of the month.
      */
-    public static int lastDayOfMonth(final Month month, final int yyyy) {
-
-        final int result = LAST_DAY_OF_MONTH[month.index];
-        if (month != Month.FEBRUARY) {
-            return result;
-        }
-        else if (isLeapYear(yyyy)) {
-            return result + 1;
+    public static int lastDayOfMonth(Month month, int yyyy) {
+        if (month == Month.FEBRUARY && isLeapYear(yyyy)) {
+            return month.lastDay() + 1;
         }
         else {
-           return result;
+            return month.lastDay();
         }
     }
 

@@ -12,6 +12,8 @@ public enum Month {
     public final int index;
     private  static DateFormatSymbols dateFormatSymbols
             = new DateFormatSymbols(Locale.ENGLISH);
+    private static final int[] LAST_DAY_OF_MONTH =
+            {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     Month(int index) {
         this.index = index;
@@ -56,5 +58,9 @@ public enum Month {
 
     public String toShortString() {
         return dateFormatSymbols.getShortMonths()[index - 1];
+    }
+
+    public int lastDay() {
+        return LAST_DAY_OF_MONTH[index];
     }
 }
