@@ -84,12 +84,34 @@ public abstract class DayDate implements Comparable,
     }
 
     public static enum DateInterval {
-        CLOSED(1), CLOSED_LEFT(2), CLOSED_RIGHT(2), OPEN(3);
+        CLOSED(1) {
+            @Override
+            public boolean isIn(int d, int left, int right) {
+                return d >= left && d <= right;
+            }
+        }, CLOSED_LEFT(2) {
+            @Override
+            public boolean isIn(int d, int left, int right) {
+                return d >= left && d < right;
+            }
+        }, CLOSED_RIGHT(2) {
+            @Override
+            public boolean isIn(int d, int left, int right) {
+                return d > left && d <= right;
+            }
+        }, OPEN(3) {
+            @Override
+            public boolean isIn(int d, int left, int right) {
+                return d > left && d < right;
+            }
+        };
         public final int index;
 
         DateInterval(int index){
             this.index = index;
         }
+
+        public abstract boolean isIn(int d, int left, int right);
     }
 
     public static enum WeekdayRange {
@@ -299,16 +321,6 @@ public abstract class DayDate implements Comparable,
 
     public abstract Day getDayOfWeekForOrdinalZero();
 
-    /**
-     * Returns the difference (in days) between this date and the specified
-     * 'other' date
-     * <P>
-     *     The result is positive if this date is after the 'other' date and
-     *     negative if it is before the 'other' date.
-     * </P>
-     * @param other the date being compared to.
-     * @return the difference between this and the other date.
-     */
     public int daySince(DayDate other) {
         return getOrdinalDay() - other.getOrdinalDay();
     }
@@ -333,25 +345,14 @@ public abstract class DayDate implements Comparable,
         return (getOrdinalDay() >= other.getOrdinalDay());
     }
 
-    /**
-     * Returns <code>true</code> if this {@link DayDate} represents the same date as the
-     * specified range (INCLUSIVE). The date order of d1 and d2 is not important.
-     * @param d1 a boundary date for the range.
-     * @param d2 the other boundary date for the range
-     * @return A boolean
-     */
-    public abstract boolean isInRange(DayDate d1, DayDate d2);
+    public boolean isInRange(DayDate d1, DayDate d2) {
+        return isInRange(d1, d2, DateInterval.OPEN);
+    }
 
-    /**
-     * Returns <code>true</code> if this {@link DayDate} represents the same date as the
-     * specified range (caller specifies whether or not the end-points are included). The
-     * date order of d1 and d2 is not important.
-     * @param d1 a boundary date for the range.
-     * @param d2 the other boundary date for the range.
-     * @param include a code that controls whether or not the start and end
-     *                dates are included in the range.
-     * @return A boolean
-     */
-    public abstract boolean isInRange(DayDate d1, DayDate d2,
-                                      DateInterval include);
+    public boolean isInRange(DayDate d1, DayDate d2, DateInterval include) {
+        int left = Math.min(d1.getOrdinalDay(), d2.getOrdinalDay());
+        int right = Math.max(d1.getOrdinalDay(), d2.getOrdinalDay());
+        int d = getOrdinalDay();
+        return include.isIn(d, left, right);
+    }
 }
