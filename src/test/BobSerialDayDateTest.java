@@ -2,6 +2,7 @@ package test;
 
 import junit.framework.TestCase;
 import main.DayDate;
+import main.Month;
 import main.SpreadsheetDayDate;
 
 import java.util.GregorianCalendar;
@@ -92,31 +93,31 @@ public class BobSerialDayDateTest extends TestCase {
     }
 
     public void testMonthCodeToString() throws Exception {
-        assertEquals("January", monthCodeToString(JANUARY));
-        assertEquals("February", monthCodeToString(FEBRUARY));
-        assertEquals("March", monthCodeToString(MARCH));
-        assertEquals("April", monthCodeToString(APRIL));
-        assertEquals("May", monthCodeToString(MAY));
-        assertEquals("June", monthCodeToString(JUNE));
-        assertEquals("July", monthCodeToString(JULY));
-        assertEquals("August", monthCodeToString(AUGUST));
-        assertEquals("September", monthCodeToString(SEPTEMBER));
-        assertEquals("October", monthCodeToString(OCTOBER));
-        assertEquals("November", monthCodeToString(NOVEMBER));
-        assertEquals("December", monthCodeToString(DECEMBER));
+        assertEquals("January", JANUARY.toString());
+        assertEquals("February", FEBRUARY.toString());
+        assertEquals("March", MARCH.toString());
+        assertEquals("April", APRIL.toString());
+        assertEquals("May", MAY.toString());
+        assertEquals("June", JUNE.toString());
+        assertEquals("July", JULY.toString());
+        assertEquals("August", AUGUST.toString());
+        assertEquals("September", SEPTEMBER.toString());
+        assertEquals("October", OCTOBER.toString());
+        assertEquals("November", NOVEMBER.toString());
+        assertEquals("December", DECEMBER.toString());
 
-        assertEquals("Jan", monthCodeToString(JANUARY, true));
-        assertEquals("Feb", monthCodeToString(FEBRUARY, true));
-        assertEquals("Mar", monthCodeToString(MARCH, true));
-        assertEquals("Apr", monthCodeToString(APRIL, true));
-        assertEquals("May", monthCodeToString(MAY, true));
-        assertEquals("Jun", monthCodeToString(JUNE, true));
-        assertEquals("Jul", monthCodeToString(JULY, true));
-        assertEquals("Aug", monthCodeToString(AUGUST, true));
-        assertEquals("Sep", monthCodeToString(SEPTEMBER, true));
-        assertEquals("Oct", monthCodeToString(OCTOBER, true));
-        assertEquals("Nov", monthCodeToString(NOVEMBER, true));
-        assertEquals("Dec", monthCodeToString(DECEMBER, true));
+        assertEquals("Jan", JANUARY.toShortString());
+        assertEquals("Feb", FEBRUARY.toShortString());
+        assertEquals("Mar", MARCH.toShortString());
+        assertEquals("Apr", APRIL.toShortString());
+        assertEquals("May", MAY.toShortString());
+        assertEquals("Jun", JUNE.toShortString());
+        assertEquals("Jul", JULY.toShortString());
+        assertEquals("Aug", AUGUST.toShortString());
+        assertEquals("Sep", SEPTEMBER.toShortString());
+        assertEquals("Oct", OCTOBER.toShortString());
+        assertEquals("Nov", NOVEMBER.toShortString());
+        assertEquals("Dec", DECEMBER.toShortString());
 
 //        try {
 //            monthCodeToString(-1);
@@ -145,8 +146,8 @@ public class BobSerialDayDateTest extends TestCase {
         assertEquals(-1, stringToMonthCode("Hello"));
 
         for (int m = 1; m <= 12; m++) {
-            assertEquals(m, stringToMonthCode(monthCodeToString(makeMonth(m), false)));
-            assertEquals(m, stringToMonthCode(monthCodeToString(makeMonth(m), true)));
+            assertEquals(m, stringToMonthCode(Month.makeMonth(m).toString()));
+            assertEquals(m, stringToMonthCode(Month.makeMonth(m).toShortString()));
         }
 
 //        assertEquals(1, stringToMonthCode("jan"));

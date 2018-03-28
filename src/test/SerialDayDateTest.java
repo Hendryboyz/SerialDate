@@ -142,8 +142,7 @@ public class SerialDayDateTest extends TestCase {
      * Tests the conversion of a month code to a string
      */
     public void testMonthCodeToStringCode() {
-        final String test = DayDate.monthCodeToString(Month.DECEMBER);
-        assertEquals("December", test);
+        assertEquals("December", Month.DECEMBER.toString());
     }
 
     /**
