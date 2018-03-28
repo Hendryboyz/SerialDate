@@ -117,23 +117,6 @@ public abstract class DayDate implements Comparable,
         boolean hundredth = (yyyy % 100) == 0;
         boolean fourHundredth = (yyyy % 400) == 0;
         return fourth && (!hundredth || fourHundredth);
-}
-
-    /**
-     * Returns the number of leap years from 1900 to the specified year INCLUSIVE
-     * <P>
-     *     Note that 1900 is not a leap year
-     * </P>
-     * @param yyyy
-     * @return
-     */
-    public static int leapYearCount(final int yyyy) {
-
-        final int leap4 = (yyyy - 1896) / 4;
-        final int leap100 = (yyyy - 1800) / 100;
-        final int leap400 = (yyyy - 1600) / 400;
-        return leap4 - leap100 + leap400;
-
     }
 
     /**

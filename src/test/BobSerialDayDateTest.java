@@ -213,21 +213,21 @@ public class BobSerialDayDateTest extends TestCase {
     }
 
     public void testLeapYearCount() throws Exception {
-        assertEquals(0, leapYearCount(1900));
-        assertEquals(0, leapYearCount(1901));
-        assertEquals(0, leapYearCount(1902));
-        assertEquals(0, leapYearCount(1903));
-        assertEquals(1, leapYearCount(1904));
-        assertEquals(1, leapYearCount(1905));
-        assertEquals(1, leapYearCount(1906));
-        assertEquals(1, leapYearCount(1907));
-        assertEquals(2, leapYearCount(1908));
-        assertEquals(24, leapYearCount(1999));
-        assertEquals(25, leapYearCount(2001));
-        assertEquals(49, leapYearCount(2101));
-        assertEquals(73, leapYearCount(2201));
-        assertEquals(97, leapYearCount(2301));
-        assertEquals(122, leapYearCount(2401));
+        assertEquals(0, SpreadsheetDayDate.leapYearCount(1900));
+        assertEquals(0, SpreadsheetDayDate.leapYearCount(1901));
+        assertEquals(0, SpreadsheetDayDate.leapYearCount(1902));
+        assertEquals(0, SpreadsheetDayDate.leapYearCount(1903));
+        assertEquals(1, SpreadsheetDayDate.leapYearCount(1904));
+        assertEquals(1, SpreadsheetDayDate.leapYearCount(1905));
+        assertEquals(1, SpreadsheetDayDate.leapYearCount(1906));
+        assertEquals(1, SpreadsheetDayDate.leapYearCount(1907));
+        assertEquals(2, SpreadsheetDayDate.leapYearCount(1908));
+        assertEquals(24, SpreadsheetDayDate.leapYearCount(1999));
+        assertEquals(25, SpreadsheetDayDate.leapYearCount(2001));
+        assertEquals(49, SpreadsheetDayDate.leapYearCount(2101));
+        assertEquals(73, SpreadsheetDayDate.leapYearCount(2201));
+        assertEquals(97, SpreadsheetDayDate.leapYearCount(2301));
+        assertEquals(122, SpreadsheetDayDate.leapYearCount(2401));
     }
 
     public void testLastDayOfMonth() throws Exception {
