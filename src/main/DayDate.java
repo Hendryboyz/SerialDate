@@ -40,7 +40,6 @@ package main;
 
 import java.io.Serializable;
 import java.text.*;
-import java.time.DayOfWeek;
 import java.util.*;
 /**
  *  An abstract class that defines our requirements for manipulating dates,
@@ -57,10 +56,11 @@ import java.util.*;
  *      January 2015) without concerning ourselves about the time of day, or the
  *      time-zone, or anything else.  That's what we've defined DayDate for.
  *  </pre>
- *  You can call getInstance() to get a concrete subclass of DayDate,
- *  without worrying about the exact implementation.
+ *
+ *  Use DayDateFactory.makeDate to create an instance.
  *
  * @author David Gilbert
+ * @author Henry Chou
  */
 public abstract class DayDate implements Comparable,
                                     Serializable {
@@ -70,60 +70,7 @@ public abstract class DayDate implements Comparable,
         DATE_FORMAT_SYMBOLS = new SimpleDateFormat("", Locale.ENGLISH)
             .getDateFormatSymbols();
 
-    public static enum WeekInMonth {
-        FIRST(1), SECOND(2), THIRD(3), FOURTH(4), LAST(0);
-        public final int index;
-
-        WeekInMonth(int index){
-            this.index = index;
-        }
-
-        public int toInt() {
-            return index;
-        }
-    }
-
-    public static enum DateInterval {
-        CLOSED(1) {
-            @Override
-            public boolean isIn(int d, int left, int right) {
-                return d >= left && d <= right;
-            }
-        }, CLOSED_LEFT(2) {
-            @Override
-            public boolean isIn(int d, int left, int right) {
-                return d >= left && d < right;
-            }
-        }, CLOSED_RIGHT(2) {
-            @Override
-            public boolean isIn(int d, int left, int right) {
-                return d > left && d <= right;
-            }
-        }, OPEN(3) {
-            @Override
-            public boolean isIn(int d, int left, int right) {
-                return d > left && d < right;
-            }
-        };
-        public final int index;
-
-        DateInterval(int index){
-            this.index = index;
-        }
-
-        public abstract boolean isIn(int d, int left, int right);
-    }
-
-    public static enum WeekdayRange {
-        LAST(-1), NEAREST(0), NEXT(1);
-        public final int index;
-
-        WeekdayRange(int index){
-            this.index = index;
-        }
-    }
-
-    public static String[] getMonthNames() {
+        public static String[] getMonthNames() {
         return DATE_FORMAT_SYMBOLS.getMonths();
     }
 

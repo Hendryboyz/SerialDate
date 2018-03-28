@@ -14,7 +14,7 @@ public enum Day {
     SUNDAY(Calendar.SUNDAY);
 
     public final int index;
-    private  static DateFormatSymbols dateFormatSymbols
+    private static DateFormatSymbols dateFormatSymbols
             = new DateFormatSymbols(Locale.ENGLISH);
     Day(int day) {
         index = day;
