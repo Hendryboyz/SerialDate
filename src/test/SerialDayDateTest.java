@@ -6,6 +6,7 @@ import junit.framework.TestSuite;
 import main.*;
 
 import static main.Day.*;
+import static main.Month.parseMonth;
 
 import java.io.*;
 
@@ -116,11 +117,11 @@ public class SerialDayDateTest extends TestCase {
      * default locale doesn't use English weekday names... devise a better test!
      */
     public void testStringToWeekday() {
-        assertEquals(WEDNESDAY, Day.parse("Wednesday"));
+        assertEquals(WEDNESDAY, Day.parseDay("Wednesday"));
 
-        assertEquals(WEDNESDAY, Day.parse(" Wednesday "));
+        assertEquals(WEDNESDAY, Day.parseDay(" Wednesday "));
 
-        assertEquals(WEDNESDAY, Day.parse("Wed"));
+        assertEquals(WEDNESDAY, Day.parseDay("Wed"));
     }
 
     /**
@@ -128,14 +129,11 @@ public class SerialDayDateTest extends TestCase {
      * default locale doesn't use English weekday names... devise a better test!
      */
     public void testStringToMonthCode() {
-        int m = DayDate.stringToMonthCode("January");
-        assertEquals(Month.JANUARY.index, m);
+        assertEquals(Month.JANUARY, parseMonth("January"));
 
-        m = DayDate.stringToMonthCode(" January ");
-        assertEquals(Month.JANUARY.index, m);
+        assertEquals(Month.JANUARY, parseMonth(" January "));
 
-        m = DayDate.stringToMonthCode("Jan");
-        assertEquals(Month.JANUARY.index, m);
+        assertEquals(Month.JANUARY, parseMonth("Jan"));
     }
 
     /**

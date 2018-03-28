@@ -16,55 +16,55 @@ public class BobSerialDayDateTest extends TestCase {
     public void testStringToWeekdayCode() throws Exception {
 
         try {
-            parse("Hello");
+            parseDay("Hello");
             fail("Invalid Weekday Code should throw exception.");
         } catch (IllegalArgumentException e) {
 
         }
 
-        assertEquals(MONDAY, parse("Monday"));
-        assertEquals(MONDAY, parse("Mon"));
-        assertEquals(MONDAY, parse("monday"));
-        assertEquals(MONDAY, parse("MONDAY"));
-        assertEquals(MONDAY, parse("mon"));
+        assertEquals(MONDAY, parseDay("Monday"));
+        assertEquals(MONDAY, parseDay("Mon"));
+        assertEquals(MONDAY, parseDay("monday"));
+        assertEquals(MONDAY, parseDay("MONDAY"));
+        assertEquals(MONDAY, parseDay("mon"));
 
-        assertEquals(TUESDAY, parse("Tuesday"));
-        assertEquals(TUESDAY, parse("Tue"));
-        assertEquals(TUESDAY, parse("tuesday"));
-        assertEquals(TUESDAY, parse("TUESDAY"));
-        assertEquals(TUESDAY, parse("tue"));
-//        assertEquals(Day.TUESDAY, parse("tues"));
+        assertEquals(TUESDAY, parseDay("Tuesday"));
+        assertEquals(TUESDAY, parseDay("Tue"));
+        assertEquals(TUESDAY, parseDay("tuesday"));
+        assertEquals(TUESDAY, parseDay("TUESDAY"));
+        assertEquals(TUESDAY, parseDay("tue"));
+//        assertEquals(Day.TUESDAY, parseDay("tues"));
 
-        assertEquals(WEDNESDAY, parse("Wednesday"));
-        assertEquals(WEDNESDAY, parse("Wed"));
-        assertEquals(WEDNESDAY, parse("wednesday"));
-        assertEquals(WEDNESDAY, parse("WEDNESDAY"));
-        assertEquals(WEDNESDAY, parse("wed"));
+        assertEquals(WEDNESDAY, parseDay("Wednesday"));
+        assertEquals(WEDNESDAY, parseDay("Wed"));
+        assertEquals(WEDNESDAY, parseDay("wednesday"));
+        assertEquals(WEDNESDAY, parseDay("WEDNESDAY"));
+        assertEquals(WEDNESDAY, parseDay("wed"));
 
-        assertEquals(THURSDAY, parse("Thursday"));
-        assertEquals(THURSDAY, parse("Thu"));
-        assertEquals(THURSDAY, parse("thursday"));
-        assertEquals(THURSDAY, parse("THURSDAY"));
-        assertEquals(THURSDAY, parse("thu"));
-//        assertEquals(Day.THURSDAY, parse("thurs"));
+        assertEquals(THURSDAY, parseDay("Thursday"));
+        assertEquals(THURSDAY, parseDay("Thu"));
+        assertEquals(THURSDAY, parseDay("thursday"));
+        assertEquals(THURSDAY, parseDay("THURSDAY"));
+        assertEquals(THURSDAY, parseDay("thu"));
+//        assertEquals(Day.THURSDAY, parseDay("thurs"));
 
-        assertEquals(FRIDAY, parse("Friday"));
-        assertEquals(FRIDAY, parse("Fri"));
-        assertEquals(FRIDAY, parse("friday"));
-        assertEquals(FRIDAY, parse("FRIDAY"));
-        assertEquals(FRIDAY, parse("fri"));
+        assertEquals(FRIDAY, parseDay("Friday"));
+        assertEquals(FRIDAY, parseDay("Fri"));
+        assertEquals(FRIDAY, parseDay("friday"));
+        assertEquals(FRIDAY, parseDay("FRIDAY"));
+        assertEquals(FRIDAY, parseDay("fri"));
 
-        assertEquals(SATURDAY, parse("Saturday"));
-        assertEquals(SATURDAY, parse("Sat"));
-        assertEquals(SATURDAY, parse("saturday"));
-        assertEquals(SATURDAY, parse("SATURDAY"));
-        assertEquals(SATURDAY, parse("sat"));
+        assertEquals(SATURDAY, parseDay("Saturday"));
+        assertEquals(SATURDAY, parseDay("Sat"));
+        assertEquals(SATURDAY, parseDay("saturday"));
+        assertEquals(SATURDAY, parseDay("SATURDAY"));
+        assertEquals(SATURDAY, parseDay("sat"));
 
-        assertEquals(SUNDAY, parse("Sunday"));
-        assertEquals(SUNDAY, parse("Sun"));
-        assertEquals(SUNDAY, parse("sunday"));
-        assertEquals(SUNDAY, parse("SUNDAY"));
-        assertEquals(SUNDAY, parse("sun"));
+        assertEquals(SUNDAY, parseDay("Sunday"));
+        assertEquals(SUNDAY, parseDay("Sun"));
+        assertEquals(SUNDAY, parseDay("sunday"));
+        assertEquals(SUNDAY, parseDay("SUNDAY"));
+        assertEquals(SUNDAY, parseDay("sun"));
     }
 
     public void testWeekdayCodeToString() throws Exception {
@@ -118,98 +118,84 @@ public class BobSerialDayDateTest extends TestCase {
         assertEquals("Oct", OCTOBER.toShortString());
         assertEquals("Nov", NOVEMBER.toShortString());
         assertEquals("Dec", DECEMBER.toShortString());
-
-//        try {
-//            monthCodeToString(-1);
-//            fail("Invalid month code should throw exception.");
-//        } catch (IllegalArgumentException e) {
-//        }
     }
 
     public void testStringToMonthCode() throws Exception {
-        assertEquals(1, stringToMonthCode("1"));
-        assertEquals(2, stringToMonthCode("2"));
-        assertEquals(3, stringToMonthCode("3"));
-        assertEquals(4, stringToMonthCode("4"));
-        assertEquals(5, stringToMonthCode("5"));
-        assertEquals(6, stringToMonthCode("6"));
-        assertEquals(7, stringToMonthCode("7"));
-        assertEquals(8, stringToMonthCode("8"));
-        assertEquals(9, stringToMonthCode("9"));
-        assertEquals(10, stringToMonthCode("10"));
-        assertEquals(11, stringToMonthCode("11"));
-        assertEquals(12, stringToMonthCode("12"));
+        assertEquals(1, parseMonth("1").index);
+        assertEquals(2, parseMonth("2").index);
+        assertEquals(3, parseMonth("3").index);
+        assertEquals(4, parseMonth("4").index);
+        assertEquals(5, parseMonth("5").index);
+        assertEquals(6, parseMonth("6").index);
+        assertEquals(7, parseMonth("7").index);
+        assertEquals(8, parseMonth("8").index);
+        assertEquals(9, parseMonth("9").index);
+        assertEquals(10, parseMonth("10").index);
+        assertEquals(11, parseMonth("11").index);
+        assertEquals(12, parseMonth("12").index);
 
-//todo        assertEquals(-1, stringToMonthCode("0"));
-//        assertEquals(-1, stringToMonthCode("13"));
-
-        assertEquals(-1, stringToMonthCode("Hello"));
-
-        for (int m = 1; m <= 12; m++) {
-            assertEquals(m, stringToMonthCode(Month.makeMonth(m).toString()));
-            assertEquals(m, stringToMonthCode(Month.makeMonth(m).toShortString()));
+        try {
+            parseMonth("Hello");
+            fail("Invalid month string should throw exception.");
+        } catch (IllegalArgumentException e) {
         }
 
-//        assertEquals(1, stringToMonthCode("jan"));
-//        assertEquals(2, stringToMonthCode("feb"));
-//        assertEquals(3, stringToMonthCode("mar"));
-//        assertEquals(4, stringToMonthCode("apr"));
-//        assertEquals(5, stringToMonthCode("may"));
-//        assertEquals(6, stringToMonthCode("jun"));
-//        assertEquals(7, stringToMonthCode("jul"));
-//        assertEquals(8, stringToMonthCode("aug"));
-//        assertEquals(9, stringToMonthCode("sep"));
-//        assertEquals(10, stringToMonthCode("oct"));
-//        assertEquals(11, stringToMonthCode("nov"));
-//        assertEquals(12, stringToMonthCode("dec"));
+        for (int m = 1; m <= 12; m++) {
+            assertEquals(m, Month.makeMonth(m).index);
+        }
 
-//        assertEquals(1, stringToMonthCode("JAN"));
-//        assertEquals(2, stringToMonthCode("FEB"));
-//        assertEquals(3, stringToMonthCode("MAR"));
-//        assertEquals(4, stringToMonthCode("APR"));
-//        assertEquals(5, stringToMonthCode("MAY"));
-//        assertEquals(6, stringToMonthCode("JUN"));
-//        assertEquals(7, stringToMonthCode("JUL"));
-//        assertEquals(8, stringToMonthCode("AUG"));
-//        assertEquals(9, stringToMonthCode("SEP"));
-//        assertEquals(10, stringToMonthCode("OCT"));
-//        assertEquals(11, stringToMonthCode("NOV"));
-//        assertEquals(12, stringToMonthCode("DEC"));
+        assertEquals(1, parseMonth("jan").index);
+        assertEquals(2, parseMonth("feb").index);
+        assertEquals(3, parseMonth("mar").index);
+        assertEquals(4, parseMonth("apr").index);
+        assertEquals(5, parseMonth("may").index);
+        assertEquals(6, parseMonth("jun").index);
+        assertEquals(7, parseMonth("jul").index);
+        assertEquals(8, parseMonth("aug").index);
+        assertEquals(9, parseMonth("sep").index);
+        assertEquals(10, parseMonth("oct").index);
+        assertEquals(11, parseMonth("nov").index);
+        assertEquals(12, parseMonth("dec").index);
 
-//        assertEquals(1, stringToMonthCode("january"));
-//        assertEquals(2, stringToMonthCode("february"));
-//        assertEquals(3, stringToMonthCode("march"));
-//        assertEquals(4, stringToMonthCode("Month.APRIL.index"));
-//        assertEquals(5, stringToMonthCode("may"));
-//        assertEquals(6, stringToMonthCode("june"));
-//        assertEquals(7, stringToMonthCode("july"));
-//        assertEquals(8, stringToMonthCode("august"));
-//        assertEquals(9, stringToMonthCode("september"));
-//        assertEquals(10, stringToMonthCode("october"));
-//        assertEquals(11, stringToMonthCode("november"));
-//        assertEquals(12, stringToMonthCode("december"));
+        assertEquals(1, parseMonth("JAN").index);
+        assertEquals(2, parseMonth("FEB").index);
+        assertEquals(3, parseMonth("MAR").index);
+        assertEquals(4, parseMonth("APR").index);
+        assertEquals(5, parseMonth("MAY").index);
+        assertEquals(6, parseMonth("JUN").index);
+        assertEquals(7, parseMonth("JUL").index);
+        assertEquals(8, parseMonth("AUG").index);
+        assertEquals(9, parseMonth("SEP").index);
+        assertEquals(10, parseMonth("OCT").index);
+        assertEquals(11, parseMonth("NOV").index);
+        assertEquals(12, parseMonth("DEC").index);
 
-//        assertEquals(1, stringToMonthCode("JANUARY"));
-//        assertEquals(2, stringToMonthCode("FEBRUARY"));
-//        assertEquals(3, stringToMonthCode("MARCH"));
-//        assertEquals(4, stringToMonthCode("Month.APRIL.index"));
-//        assertEquals(5, stringToMonthCode("MAY"));
-//        assertEquals(6, stringToMonthCode("JUNE"));
-//        assertEquals(7, stringToMonthCode("JULY"));
-//        assertEquals(8, stringToMonthCode("AUGUST"));
-//        assertEquals(9, stringToMonthCode("SEPTEMBER"));
-//        assertEquals(10, stringToMonthCode("OCTOBER"));
-//        assertEquals(11, stringToMonthCode("NOVEMBER"));
-//        assertEquals(12, stringToMonthCode("DECEMBER"));
+        assertEquals(1, parseMonth("january").index);
+        assertEquals(2, parseMonth("february").index);
+        assertEquals(3, parseMonth("march").index);
+        assertEquals(4, parseMonth("april").index);
+        assertEquals(5, parseMonth("may").index);
+        assertEquals(6, parseMonth("june").index);
+        assertEquals(7, parseMonth("july").index);
+        assertEquals(8, parseMonth("august").index);
+        assertEquals(9, parseMonth("september").index);
+        assertEquals(10, parseMonth("october").index);
+        assertEquals(11, parseMonth("november").index);
+        assertEquals(12, parseMonth("december").index);
+
+        assertEquals(1, parseMonth("JANUARY").index);
+        assertEquals(2, parseMonth("FEBRUARY").index);
+        assertEquals(3, parseMonth("MARCH").index);
+        assertEquals(4, parseMonth("APRIL").index);
+        assertEquals(5, parseMonth("MAY").index);
+        assertEquals(6, parseMonth("JUNE").index);
+        assertEquals(7, parseMonth("JULY").index);
+        assertEquals(8, parseMonth("AUGUST").index);
+        assertEquals(9, parseMonth("SEPTEMBER").index);
+        assertEquals(10, parseMonth("OCTOBER").index);
+        assertEquals(11, parseMonth("NOVEMBER").index);
+        assertEquals(12, parseMonth("DECEMBER").index);
     }
-
-//    public void testIsValidWeekInMonthCode() throws Exception {
-//        // test case error, week code 0 is invalid
-//        for (int w = 1; w <= 4; w++) {
-//            assertTrue(isValidWeekInMonthCode(w));
-//        }
-//        assertFalse(isValidWeekInMonthCode(5));
-//    }
 
     public void testIsLeapYear() throws Exception {
         assertFalse(isLeapYear(1900));

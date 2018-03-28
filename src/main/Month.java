@@ -26,6 +26,26 @@ public enum Month {
                 "Invalid month index " + monthIndex);
     }
 
+    public static Month parseMonth(String s) {
+        s = s.trim();
+        for (Month m : Month.values()) {
+            if (m.matches(s)) {
+                return m;
+            }
+        }
+
+        try {
+            return makeMonth(Integer.parseInt(s));
+        }
+        catch (NumberFormatException e) {}
+        throw new IllegalArgumentException("Invalid month " + s);
+    }
+
+    private boolean matches(String s) {
+        return s.equalsIgnoreCase(toString()) ||
+                s.equalsIgnoreCase(toShortString());
+    }
+
     public int quarter() {
         return 1 + (index - 1)/3;
     }

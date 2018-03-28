@@ -29,7 +29,7 @@ public enum Day {
                 String.format("Illegal day index: %d", index));
     }
 
-    public static Day parse(String s) {
+    public static Day parseDay(String s) {
         final String[] shortWeekdayNames =
                 dateFormatSymbols.getShortWeekdays();
         final String[] weekDayNames =
