@@ -40,6 +40,7 @@ package main;
 
 import java.io.Serializable;
 import java.text.*;
+import java.time.DayOfWeek;
 import java.util.*;
 /**
  *  An abstract class that defines our requirements for manipulating dates,
@@ -133,7 +134,7 @@ public abstract class DayDate implements Comparable,
     }
 
     public DayDate plusDays(int days) {
-        return DayDateFactory.makeDate(toOrdinal() + days);
+        return DayDateFactory.makeDate(getOrdinalDay() + days);
     }
 
     public DayDate plusMonths(final int months) {
@@ -160,7 +161,7 @@ public abstract class DayDate implements Comparable,
     }
 
     public DayDate getPreviousDayOfWeek(final Day targetWeekday) {
-        int offsetToTarget = targetWeekday.index - getDayOfWeek();
+        int offsetToTarget = targetWeekday.index - getDayOfWeek().index;
         if (offsetToTarget >= 0) {
             offsetToTarget -= 7;
         }
@@ -168,7 +169,7 @@ public abstract class DayDate implements Comparable,
     }
 
     public DayDate getFollowingDayOfWeek(Day targetWeekday) {
-        int offsetToTarget = targetWeekday.index - getDayOfWeek();
+        int offsetToTarget = targetWeekday.index - getDayOfWeek().index;
         if (offsetToTarget <= 0) {
             offsetToTarget += 7;
         }
@@ -177,7 +178,7 @@ public abstract class DayDate implements Comparable,
     }
 
     public DayDate getNearestDayOfWeek(final Day targetDOW) {
-        int offsetToThisWeeksTarget = targetDOW.index - getDayOfWeek();
+        int offsetToThisWeeksTarget = targetDOW.index - getDayOfWeek().index;
         int offsetToFutureTarget = (offsetToThisWeeksTarget + 7) % 7;
         int offsetToPreviousTarget = offsetToFutureTarget - 7;
         if (offsetToFutureTarget > 3)
@@ -248,14 +249,18 @@ public abstract class DayDate implements Comparable,
      * Windows and Lotus 1-2-3).
      * @return the serial number for the date
      */
-    public abstract int toOrdinal();
+    public abstract int getOrdinalDay();
 
     /**
      * Returns a java.util.DayDate. Since java.util.DayDate has more precision than
      * DayDate, we need to define a convention for the 'time of day'.
      * @return this as <code>java.util.DayDate</code>
      */
-    public abstract java.util.Date toDate();
+    public java.util.Date toDate() {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(getYear(), getMonth().index - 1, getDayOfMonth(), 0, 0, 0);
+        return calendar.getTime();
+    }
 
     /**
      * Converts the date to a string.
@@ -284,11 +289,15 @@ public abstract class DayDate implements Comparable,
      */
     public abstract int getDayOfMonth();
 
-    /**
-     * Returns the day of the week.
-     * @return the day of the week.
-     */
-    public abstract int getDayOfWeek();
+    public Day getDayOfWeek() {
+        // todo some logic error ?
+        Day startingDay = getDayOfWeekForOrdinalZero();
+        int startingOffset = startingDay.index - Day.SUNDAY.index; //6
+        return Day.make((getOrdinalDay() + 6) % 7 + 1);
+//        return Day.make((getOrdinalDay() + startingOffset) % 7 + 1);
+    }
+
+    public abstract Day getDayOfWeekForOrdinalZero();
 
     /**
      * Returns the difference (in days) between this date and the specified
@@ -300,51 +309,29 @@ public abstract class DayDate implements Comparable,
      * @param other the date being compared to.
      * @return the difference between this and the other date.
      */
-    public abstract int compare(DayDate other);
+    public int daySince(DayDate other) {
+        return getOrdinalDay() - other.getOrdinalDay();
+    }
 
-    /**
-     * Returns true if this Serial represents the same date as the specified DayDate
-     * @param other the date being compared to
-     * @return <code>true</code> if this DayDate represents the same date as the specified
-     *      DayDate.
-     */
-    public abstract boolean isOn(DayDate other);
+    public boolean isOn(DayDate other) {
+        return (getOrdinalDay() == other.getOrdinalDay());
+    }
 
-    /**
-     * Returns true if this DayDate represents an earlier date compared to
-     * the specified DayDate.
-     * @param other other The dat being compared to.
-     * @return <code>true</code> if this DayDate represents an earlier adate
-     *          compared to the specified DayDate.
-     */
-    public abstract boolean isBefore(DayDate other);
+    public boolean isBefore(DayDate other) {
+        return (getOrdinalDay() < other.getOrdinalDay());
+    }
 
-    /**
-     * Returns true if this DayDate represents the same date as the
-     * specified DayDate.
-     * @param other the date being compared to.
-     * @return <code>true</code> if this DayDate represents the same date
-     *          as the specified DayDate.
-     */
-    public abstract boolean isOnOrBefore(DayDate other);
+    public boolean isOnOrBefore(DayDate other) {
+        return (getOrdinalDay() <= other.getOrdinalDay());
+    }
 
-    /**
-     * Returns true if this DayDate represents the same date as the specified
-     * DayDate
-     * @param other the date being compared to
-     * @return <code>true</code> if this DayDate represents the same date
-     *          as the specified DayDate
-     */
-    public abstract boolean isAfter(DayDate other);
+    public boolean isAfter(DayDate other) {
+        return (getOrdinalDay() > other.getOrdinalDay());
+    }
 
-    /**
-     * Returns true if this DayDate represents the same date as the
-     * specified DayDate
-     * @param other the date being compared to
-     * @return <code>true</code> if this DayDate represents the same date
-     *          as the specified DayDate
-     */
-    public abstract boolean isOnOrAfter(DayDate other);
+    public boolean isOnOrAfter(DayDate other) {
+        return (getOrdinalDay() >= other.getOrdinalDay());
+    }
 
     /**
      * Returns <code>true</code> if this {@link DayDate} represents the same date as the

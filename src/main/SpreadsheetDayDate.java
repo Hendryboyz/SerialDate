@@ -1,7 +1,5 @@
 package main;
 
-import java.util.Calendar;
-
 public class SpreadsheetDayDate extends DayDate {
 
     /** For serialization */
@@ -240,19 +238,8 @@ public class SpreadsheetDayDate extends DayDate {
      * @return The serial number of this date.
      */
     @Override
-    public int toOrdinal() {
+    public int getOrdinalDay() {
         return this.serial;
-    }
-
-    /**
-     * Returns a <code>java.util.DayDate</code> equivalent to this date.
-     * @return The date
-     */
-    @Override
-    public java.util.Date toDate() {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.set(getYear(), getMonth().index - 1, getDayOfMonth(), 0, 0, 0);
-        return calendar.getTime();
     }
 
     /**
@@ -282,19 +269,9 @@ public class SpreadsheetDayDate extends DayDate {
         return this.day;
     }
 
-    /**
-     * Returns a code representing the day of the week
-     * <P>
-     *     The codes are defined in the {@link DayDate} class as
-     *     <code>SUNDAY</code>, <code>MONDAY</code>, <code>TUESDAY</code>
-     *     <code>WEDNESDAY</code>, <code>THURSDAY</code>, <code>FRIDAY</code> and
-     *     <code>SATURDAY</code>
-     * </P>
-     * @return
-     */
     @Override
-    public int getDayOfWeek() {
-        return (this.serial + 6) % 7 + 1;
+    public Day getDayOfWeekForOrdinalZero() {
+        return Day.SUNDAY;
     }
 
     /**
@@ -304,13 +281,13 @@ public class SpreadsheetDayDate extends DayDate {
      *     {@link DayDate} base class, and it represents the same day as this
      *     {@link SpreadsheetDayDate}
      * </P>
-     * @param object the object to compare (<code>null</code> permitted)
+     * @param object the object to daySince (<code>null</code> permitted)
      * @return A boolean
      */
     public boolean equals(final Object object) {
         if (object instanceof DayDate) {
             final DayDate s = (DayDate) object;
-            return (s.toOrdinal() == this.toOrdinal());
+            return (s.getOrdinalDay() == this.getOrdinalDay());
         }
         else {
             return false;
@@ -322,19 +299,7 @@ public class SpreadsheetDayDate extends DayDate {
      * @return A hash code.
      */
     public int hashCode() {
-        return toOrdinal();
-    }
-
-    /**
-     * Returns the difference (in days) between this date and the specified
-     * 'other' date.
-     * @param other the date being compared to.
-     * @return The difference (in days) between this date and the specified
-     *      'other' date.
-     */
-    @Override
-    public int compare(final DayDate other) {
-        return this.serial - other.toOrdinal();
+        return getOrdinalDay();
     }
 
     /**
@@ -345,67 +310,7 @@ public class SpreadsheetDayDate extends DayDate {
      */
     @Override
     public int compareTo(final Object other) {
-        return compare((DayDate) other);
-    }
-
-    /**
-     * Returns true if this DayDate represents the same date as the specified
-     * DayDate.
-     * @param other the date being compared to
-     * @return <code>true</code> if this DayDate represents the same date
-     *          as the specified DayDate.
-     */
-    @Override
-    public boolean isOn(final DayDate other) {
-        return (this.serial == other.toOrdinal());
-    }
-
-    /**
-     * Returns true if this DayDate represents an earlier date compared to the
-     * specified DayDate.
-     * @param other other The dat being compared to.
-     * @return <code>true</code> if this DayDate represents an earlier date
-     *          compared to the specified DayDate.
-     */
-    @Override
-    public boolean isBefore(DayDate other) {
-        return (this.serial < other.toOrdinal());
-    }
-
-    /**
-     * Returns true if this DayDate represents the same date as the
-     * specified DayDate
-     * @param other the date being compared to.
-     * @return <code>true</code> if this DayDate represents the same date
-     *          as the specified DayDate.
-     */
-    @Override
-    public boolean isOnOrBefore(DayDate other) {
-        return (this.serial <= other.toOrdinal());
-    }
-
-    /**
-     * Returns true if this DayDate represents the same date as the specified
-     * DayDate
-     * @param other the date being compared to
-     * @return <code>true</code> if this DayDate represents the same date
-     *          as the specified DayDate.
-     */
-    @Override
-    public boolean isAfter(DayDate other) {
-        return (this.serial > other.toOrdinal());
-    }
-
-    /**
-     * Returns true if this DayDate represents the same date as the specified
-     * DayDate
-     * @param other the date being compared to
-     * @return <code>true</code> if this DayDate represents the same date
-     *          as the specified DayDate.
-     */
-    @Override
-    public boolean isOnOrAfter(DayDate other) {
-        return (this.serial >= other.toOrdinal());
+        return daySince((DayDate) other);
     }
 
     /**
@@ -433,12 +338,12 @@ public class SpreadsheetDayDate extends DayDate {
      */
     @Override
     public boolean isInRange(DayDate d1, DayDate d2, DateInterval include) {
-        final int s1 = d1.toOrdinal();
-        final int s2 = d2.toOrdinal();
+        final int s1 = d1.getOrdinalDay();
+        final int s2 = d2.getOrdinalDay();
         final int start = Math.min(s1, s2);
         final int end = Math.max(s1, s2);
 
-        final int s = toOrdinal();
+        final int s = getOrdinalDay();
         if (include == DateInterval.OPEN) {
             return (s >= start && s <= end);
         }

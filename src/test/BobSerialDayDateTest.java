@@ -401,7 +401,7 @@ public class BobSerialDayDateTest extends TestCase {
         assertEquals(1, dayDate.getDayOfMonth());
         assertEquals(JANUARY, dayDate.getMonth());
         assertEquals(1900, dayDate.getYear());
-        assertEquals(2, dayDate.toOrdinal());
+        assertEquals(2, dayDate.getOrdinalDay());
     }
 
     public void testCreateInstanceFromSerial() throws Exception {
