@@ -34,7 +34,7 @@ public class SerialDayDateTest extends TestCase {
      * Problem set up.
      */
     protected void setUp() {
-        this.nov9Y2001 = DayDate.makeDate(9, Month.NOVEMBER.index, 2001);
+        this.nov9Y2001 = DayDate.makeDate(9, Month.NOVEMBER.toInt(), 2001);
     }
 
     /**
@@ -50,16 +50,16 @@ public class SerialDayDateTest extends TestCase {
      * A test case for a reported bug, now fixed
      */
     public void testAddMonthsTo5Oct2003() {
-        final DayDate d1 = DayDate.makeDate(5, Month.OCTOBER.index, 2003);
+        final DayDate d1 = DayDate.makeDate(5, Month.OCTOBER.toInt(), 2003);
         final DayDate d2 = d1.plusMonths(2);
-        assertEquals(d2, DayDate.makeDate(5, Month.DECEMBER.index, 2003));
+        assertEquals(d2, DayDate.makeDate(5, Month.DECEMBER.toInt(), 2003));
     }
 
     /**
      * A test case for a reported bug, now fixed
      */
     public void testAddMonthsTo1Jan2003() {
-        final DayDate d1 = DayDate.makeDate(1, Month.JANUARY.index, 2003);
+        final DayDate d1 = DayDate.makeDate(1, Month.JANUARY.toInt(), 2003);
         final DayDate d2 = d1.plusMonths(0);
         assertEquals(d2, d1);
     }
@@ -95,7 +95,7 @@ public class SerialDayDateTest extends TestCase {
      * The Monday nearest to 22 nd January 1940 falls on the 19th.
      */
     public void testMondayNearest22Jan1970() {
-        DayDate jan22Y1970 = DayDate.makeDate(22, Month.JANUARY.index, 1970);
+        DayDate jan22Y1970 = DayDate.makeDate(22, Month.JANUARY.toInt(), 1970);
         DayDate mondayNearest = jan22Y1970.getNearestDayOfWeek(MONDAY);
         assertEquals(19, mondayNearest.getDayOfMonth());
     }
@@ -143,14 +143,14 @@ public class SerialDayDateTest extends TestCase {
      * 1900 is not a leap year
      */
     public void testIsNotLeapYear1900() {
-        assertTrue(!DayDate.isLeapYear(1900));
+        assertTrue(!DateUtil.isLeapYear(1900));
     }
 
     /**
      * 2000 is a leap year
      */
     public void testIsLeapYear2000() {
-        assertTrue(DayDate.isLeapYear(2000));
+        assertTrue(DateUtil.isLeapYear(2000));
     }
 
     /**

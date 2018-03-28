@@ -13,20 +13,24 @@ public enum Day {
     SATURDAY(Calendar.SATURDAY),
     SUNDAY(Calendar.SUNDAY);
 
-    public final int index;
+    private final int index;
     private static DateFormatSymbols dateFormatSymbols
             = new DateFormatSymbols(Locale.ENGLISH);
     Day(int day) {
         index = day;
     }
 
-    public static Day make(int index) throws IllegalArgumentException {
+    public static Day fromInt(int index) throws IllegalArgumentException {
         for (Day d : Day.values()) {
             if (d.index == index)
                 return d;
         }
         throw new IllegalArgumentException(
                 String.format("Illegal day index: %d", index));
+    }
+
+    public int toInt() {
+        return index;
     }
 
     public static Day parseDay(String s) {

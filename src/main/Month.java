@@ -9,7 +9,7 @@ public enum Month {
     JULY(7), AUGUST(8), SEPTEMBER(9), // season 3
     OCTOBER(10), NOVEMBER(11), DECEMBER(12); // season 4
 
-    public final int index;
+    private final int index;
     private  static DateFormatSymbols dateFormatSymbols
             = new DateFormatSymbols(Locale.ENGLISH);
     private static final int[] LAST_DAY_OF_MONTH =
@@ -19,13 +19,17 @@ public enum Month {
         this.index = index;
     }
 
-    public static Month makeMonth(int monthIndex) {
+    public static Month fromInt(int monthIndex) {
         for (Month m : Month.values()) {
             if (m.index == monthIndex)
                 return m;
         }
         throw new IllegalArgumentException(
                 "Invalid month index " + monthIndex);
+    }
+
+    public int toInt() {
+        return index;
     }
 
     public static Month parseMonth(String s) {
@@ -37,7 +41,7 @@ public enum Month {
         }
 
         try {
-            return makeMonth(Integer.parseInt(s));
+            return fromInt(Integer.parseInt(s));
         }
         catch (NumberFormatException e) {}
         throw new IllegalArgumentException("Invalid month " + s);

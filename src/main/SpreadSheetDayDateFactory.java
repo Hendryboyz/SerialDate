@@ -25,7 +25,7 @@ public class SpreadSheetDayDateFactory extends DayDateFactory {
         final GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         return new SpreadsheetDayDate(calendar.get(Calendar.DATE),
-                Month.makeMonth(calendar.get(Calendar.MONTH + 1)),
+                Month.fromInt(calendar.get(Calendar.MONTH + 1)),
                 calendar.get(Calendar.YEAR));
     }
 

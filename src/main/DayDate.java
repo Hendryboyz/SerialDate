@@ -39,7 +39,6 @@
 package main;
 
 import java.io.Serializable;
-import java.text.*;
 import java.util.*;
 /**
  *  An abstract class that defines our requirements for manipulating dates,
@@ -64,73 +63,44 @@ import java.util.*;
  */
 public abstract class DayDate implements Comparable,
                                     Serializable {
+    public abstract int getOrdinalDay();
+    public abstract int getYear();
+    public abstract Month getMonth();
+    public abstract int getDayOfMonth();
 
-
-    public static final DateFormatSymbols
-        DATE_FORMAT_SYMBOLS = new SimpleDateFormat("", Locale.ENGLISH)
-            .getDateFormatSymbols();
-
-        public static String[] getMonthNames() {
-        return DATE_FORMAT_SYMBOLS.getMonths();
-    }
-
-    /**
-     * Determines whether or not the specified year is a leap year.
-     * @param yyyy the year (in the range of 1900 to 9999).
-     * @return <code>true</code> if the specified year is a leap year
-     */
-    public static boolean isLeapYear(final int yyyy) {
-        boolean fourth = (yyyy % 4) == 0;
-        boolean hundredth = (yyyy % 100) == 0;
-        boolean fourHundredth = (yyyy % 400) == 0;
-        return fourth && (!hundredth || fourHundredth);
-    }
-
-    /**
-     * Returns the number of the last day of the month, taking into account
-     * leap year
-     * @param month the month.
-     * @param yyyy the year (in the range 1900 to 9999).
-     * @return the number of the last day of the month.
-     */
-    public static int lastDayOfMonth(Month month, int yyyy) {
-        if (month == Month.FEBRUARY && isLeapYear(yyyy)) {
-            return month.lastDay() + 1;
-        }
-        else {
-            return month.lastDay();
-        }
-    }
+    protected abstract Day getDayOfWeekForOrdinalZero();
 
     public DayDate plusDays(int days) {
         return DayDateFactory.makeDate(getOrdinalDay() + days);
     }
 
-    public DayDate plusMonths(final int months) {
-        int thisMonthAsOrdinal = 12 * getYear() + getMonth().index - 1;
-        int resultMonthAsOrdinal = thisMonthAsOrdinal + months;
-        int resultYear = resultMonthAsOrdinal / 12;
-        int resultMonth = Month.makeMonth(resultMonthAsOrdinal % 12 + 1).index;
-        int lastDayOfResultMonth =
-                DayDate.lastDayOfMonth(Month.makeMonth(resultMonth), resultYear);
-        int resultDay = Math.min(getDayOfMonth(), lastDayOfResultMonth);
+    public DayDate plusMonths(int months) {
+        int thsMonthAsOrdinal = getMonth().toInt() - 1;
+        int thisMonthAndYearAsOrdinal = 12 * getYear() + thsMonthAsOrdinal;
+        int resultMonthAndYearAsOrdinal = thisMonthAndYearAsOrdinal + months;
+        int resultYear = resultMonthAndYearAsOrdinal / 12;
+        Month resultMonth = Month.fromInt(resultMonthAndYearAsOrdinal % 12 + 1);
+        int resultDay = correctLatDayOfMonth(getDayOfMonth(), resultMonth, resultYear);
         return DayDateFactory.makeDate(resultDay, resultMonth, resultYear);
 
     }
 
     public DayDate plusYear(int years) {
         int resultYear = getYear() + years;
-        int lastDayOfMonthInResultYear =
-                lastDayOfMonth(getMonth(), resultYear);
-        int resultDay =
-                Math.min(getDayOfMonth(), lastDayOfMonthInResultYear);
-
+        int resultDay = correctLatDayOfMonth(getDayOfMonth(), getMonth(), resultYear);
         return DayDateFactory.makeDate(resultDay, getMonth(), resultYear);
 
     }
 
-    public DayDate getPreviousDayOfWeek(final Day targetWeekday) {
-        int offsetToTarget = targetWeekday.index - getDayOfWeek().index;
+    private int correctLatDayOfMonth(int day, Month month, int year) {
+        int lastDayOfMonth = DateUtil.lastDayOfMonth(month, year);
+        if (day > lastDayOfMonth)
+            day = lastDayOfMonth;
+        return day;
+    }
+
+    public DayDate getPreviousDayOfWeek(Day targetWeekday) {
+        int offsetToTarget = targetWeekday.toInt() - getDayOfWeek().toInt();
         if (offsetToTarget >= 0) {
             offsetToTarget -= 7;
         }
@@ -138,7 +108,7 @@ public abstract class DayDate implements Comparable,
     }
 
     public DayDate getFollowingDayOfWeek(Day targetWeekday) {
-        int offsetToTarget = targetWeekday.index - getDayOfWeek().index;
+        int offsetToTarget = targetWeekday.toInt() - getDayOfWeek().toInt();
         if (offsetToTarget <= 0) {
             offsetToTarget += 7;
         }
@@ -146,8 +116,8 @@ public abstract class DayDate implements Comparable,
 
     }
 
-    public DayDate getNearestDayOfWeek(final Day targetDOW) {
-        int offsetToThisWeeksTarget = targetDOW.index - getDayOfWeek().index;
+    public DayDate getNearestDayOfWeek(Day targetDOW) {
+        int offsetToThisWeeksTarget = targetDOW.toInt() - getDayOfWeek().toInt();
         int offsetToFutureTarget = (offsetToThisWeeksTarget + 7) % 7;
         int offsetToPreviousTarget = offsetToFutureTarget - 7;
         if (offsetToFutureTarget > 3)
@@ -163,7 +133,7 @@ public abstract class DayDate implements Comparable,
     public DayDate getEndOfCurrentMonth() {
         Month month = getMonth();
         int year = getYear();
-        int lastDay = lastDayOfMonth(month, year);
+        int lastDay = DateUtil.lastDayOfMonth(month, year);
         return DayDateFactory.makeDate(lastDay, month, year);
     }
 
@@ -212,13 +182,6 @@ public abstract class DayDate implements Comparable,
         return DayDateFactory.makeDate(date);
     }
 
-    /**
-     * Returns the serial number for the date, where 1 January 1900 = 2 (this
-     * corresponds, almost, to the numbering system used in Microsoft Excel for
-     * Windows and Lotus 1-2-3).
-     * @return the serial number for the date
-     */
-    public abstract int getOrdinalDay();
 
     /**
      * Returns a java.util.DayDate. Since java.util.DayDate has more precision than
@@ -227,7 +190,7 @@ public abstract class DayDate implements Comparable,
      */
     public java.util.Date toDate() {
         final Calendar calendar = Calendar.getInstance();
-        calendar.set(getYear(), getMonth().index - 1, getDayOfMonth(), 0, 0, 0);
+        calendar.set(getYear(), getMonth().toInt() - 1, getDayOfMonth(), 0, 0, 0);
         return calendar.getTime();
     }
 
@@ -240,33 +203,13 @@ public abstract class DayDate implements Comparable,
                                 + "-" + getYear();
     }
 
-    /**
-     * Returns the year (assume a valid range of 1900 to 9999).
-     * @return the year.
-     */
-    public abstract int getYear();
-
-    /**
-     * Returns the month (January = 1, February = 2, March = 3).
-     * @return the month of the year.
-     */
-    public abstract Month getMonth();
-
-    /**
-     * Returns the day of the month.
-     * @return the day of the month.
-     */
-    public abstract int getDayOfMonth();
-
     public Day getDayOfWeek() {
         // todo some logic error ?
         Day startingDay = getDayOfWeekForOrdinalZero();
-        int startingOffset = startingDay.index - Day.SUNDAY.index; //6
-        return Day.make((getOrdinalDay() + 6) % 7 + 1);
-//        return Day.make((getOrdinalDay() + startingOffset) % 7 + 1);
+        int startingOffset = startingDay.toInt() - Day.SUNDAY.toInt(); //6
+        return Day.fromInt((getOrdinalDay() + 6) % 7 + 1);
+//        return Day.fromInt((getOrdinalDay() + startingOffset) % 7 + 1);
     }
-
-    public abstract Day getDayOfWeekForOrdinalZero();
 
     public int daySince(DayDate other) {
         return getOrdinalDay() - other.getOrdinalDay();
