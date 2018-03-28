@@ -113,21 +113,11 @@ public abstract class DayDate implements Comparable,
      * @return <code>true</code> if the specified year is a leap year
      */
     public static boolean isLeapYear(final int yyyy) {
-
-        if ((yyyy % 4) != 0) {
-            return false;
-        }
-        else if ((yyyy % 400) == 0) {
-            return true;
-        }
-        else if ((yyyy % 100) == 0) {
-            return false;
-        }
-        else {
-            return true;
-        }
-
-    }
+        boolean fourth = (yyyy % 4) == 0;
+        boolean hundredth = (yyyy % 100) == 0;
+        boolean fourHundredth = (yyyy % 400) == 0;
+        return fourth && (!hundredth || fourHundredth);
+}
 
     /**
      * Returns the number of leap years from 1900 to the specified year INCLUSIVE
