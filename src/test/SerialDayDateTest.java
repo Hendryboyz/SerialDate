@@ -34,7 +34,7 @@ public class SerialDayDateTest extends TestCase {
      * Problem set up.
      */
     protected void setUp() {
-        this.nov9Y2001 = DayDate.makeDate(9, Month.NOVEMBER.toInt(), 2001);
+        this.nov9Y2001 = DayDateFactory.makeDate(9, Month.NOVEMBER.toInt(), 2001);
     }
 
     /**
@@ -42,7 +42,7 @@ public class SerialDayDateTest extends TestCase {
      */
     public void testAddMonthsTo9Nov2001() {
         final DayDate jan9Y2002 = this.nov9Y2001.plusMonths(2);
-        final DayDate answer = DayDate.makeDate(9, 1, 2002);
+        final DayDate answer = DayDateFactory.makeDate(9, 1, 2002);
         assertEquals(answer, jan9Y2002);
     }
 
@@ -50,16 +50,16 @@ public class SerialDayDateTest extends TestCase {
      * A test case for a reported bug, now fixed
      */
     public void testAddMonthsTo5Oct2003() {
-        final DayDate d1 = DayDate.makeDate(5, Month.OCTOBER.toInt(), 2003);
+        final DayDate d1 = DayDateFactory.makeDate(5, Month.OCTOBER.toInt(), 2003);
         final DayDate d2 = d1.plusMonths(2);
-        assertEquals(d2, DayDate.makeDate(5, Month.DECEMBER.toInt(), 2003));
+        assertEquals(d2, DayDateFactory.makeDate(5, Month.DECEMBER.toInt(), 2003));
     }
 
     /**
      * A test case for a reported bug, now fixed
      */
     public void testAddMonthsTo1Jan2003() {
-        final DayDate d1 = DayDate.makeDate(1, Month.JANUARY.toInt(), 2003);
+        final DayDate d1 = DayDateFactory.makeDate(1, Month.JANUARY.toInt(), 2003);
         final DayDate d2 = d1.plusMonths(0);
         assertEquals(d2, d1);
     }
@@ -95,7 +95,7 @@ public class SerialDayDateTest extends TestCase {
      * The Monday nearest to 22 nd January 1940 falls on the 19th.
      */
     public void testMondayNearest22Jan1970() {
-        DayDate jan22Y1970 = DayDate.makeDate(22, Month.JANUARY.toInt(), 1970);
+        DayDate jan22Y1970 = DayDateFactory.makeDate(22, Month.JANUARY.toInt(), 1970);
         DayDate mondayNearest = jan22Y1970.getNearestDayOfWeek(MONDAY);
         assertEquals(19, mondayNearest.getDayOfMonth());
     }
@@ -125,11 +125,11 @@ public class SerialDayDateTest extends TestCase {
      * default locale doesn't use English weekday names... devise a better test!
      */
     public void testStringToMonthCode() {
-        assertEquals(Month.JANUARY, parseMonth("January"));
+        assertEquals(Month.JANUARY, parse("January"));
 
-        assertEquals(Month.JANUARY, parseMonth(" January "));
+        assertEquals(Month.JANUARY, parse(" January "));
 
-        assertEquals(Month.JANUARY, parseMonth("Jan"));
+        assertEquals(Month.JANUARY, parse("Jan"));
     }
 
     /**
@@ -157,35 +157,35 @@ public class SerialDayDateTest extends TestCase {
      * The number of leap years from 1900 up-to-and-including 1899 is 0
      */
     public void testIsLeapYearCount1899() {
-        assertEquals(SpreadsheetDayDate.leapYearCount(1899), 0);
+        assertEquals(DateUtil.leapYearCount(1899), 0);
     }
 
     /**
      * The number of leap years from 1900 up-to-and-including 1903 is 0
      */
     public void testIsLeapYearCount1903() {
-        assertEquals(SpreadsheetDayDate.leapYearCount(1903), 0);
+        assertEquals(DateUtil.leapYearCount(1903), 0);
     }
 
     /**
      * The number of leap years from 1900 up-to-and-including 1904 is 1
      */
     public void testIsLeapYearCount1904() {
-        assertEquals(SpreadsheetDayDate.leapYearCount(1904), 1);
+        assertEquals(DateUtil.leapYearCount(1904), 1);
     }
 
     /**
      * The number of leap years from 1900 up-to-and-including 1999 is 24
      */
     public void testIsLeapYearCount1999() {
-        assertEquals(SpreadsheetDayDate.leapYearCount(1999), 24);
+        assertEquals(DateUtil.leapYearCount(1999), 24);
     }
 
     /**
      * The number of leap years from 1900 up-to-and-including 2000 is 25
      */
     public void testIsLeapYearCount2000() {
-        assertEquals(SpreadsheetDayDate.leapYearCount(2000), 25);
+        assertEquals(DateUtil.leapYearCount(2000), 25);
     }
 
     /**
@@ -193,7 +193,7 @@ public class SerialDayDateTest extends TestCase {
      */
     public void testSerialization() {
 
-        DayDate d1 = DayDate.makeDate(15, 4, 2000);
+        DayDate d1 = DayDateFactory.makeDate(15, 4, 2000);
         DayDate d2 = null;
 
         try {
@@ -219,9 +219,9 @@ public class SerialDayDateTest extends TestCase {
      * A test for bug report 1096282 (now fixed).
      */
     public void test1096282() {
-        DayDate d = DayDate.makeDate(29, 2, 2004);
+        DayDate d = DayDateFactory.makeDate(29, 2, 2004);
         d = d.plusYear(1);
-        DayDate expected = DayDate.makeDate(28, 2, 2005);
+        DayDate expected = DayDateFactory.makeDate(28, 2, 2005);
         assertTrue(d.isOn(expected));
     }
 
@@ -229,7 +229,7 @@ public class SerialDayDateTest extends TestCase {
      * Miscellaneous tests for add Months() method
      */
     public void testAddMonths() {
-        DayDate d1 = DayDate.makeDate(31, 5, 2004);
+        DayDate d1 = DayDateFactory.makeDate(31, 5, 2004);
 
         DayDate d2 = d1.plusMonths(1);
         assertEquals(30, d2.getDayOfMonth());

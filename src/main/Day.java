@@ -16,6 +16,7 @@ public enum Day {
     private final int index;
     private static DateFormatSymbols dateFormatSymbols
             = new DateFormatSymbols(Locale.ENGLISH);
+
     Day(int day) {
         index = day;
     }
@@ -27,10 +28,6 @@ public enum Day {
         }
         throw new IllegalArgumentException(
                 String.format("Illegal day index: %d", index));
-    }
-
-    public int toInt() {
-        return index;
     }
 
     public static Day parseDay(String s) {
@@ -53,5 +50,9 @@ public enum Day {
 
     public String toString() {
         return dateFormatSymbols.getWeekdays()[index];
+    }
+
+    public int toInt() {
+        return index;
     }
 }

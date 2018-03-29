@@ -126,10 +126,6 @@ public abstract class DayDate implements Comparable,
             return plusDays(offsetToFutureTarget);
     }
 
-    /**
-     * Rolls the date forward to the last day of the month
-     * @return a new serial date
-     */
     public DayDate getEndOfCurrentMonth() {
         Month month = getMonth();
         int year = getYear();
@@ -137,70 +133,22 @@ public abstract class DayDate implements Comparable,
         return DayDateFactory.makeDate(lastDay, month, year);
     }
 
-    /**
-     * Factory method that returns a instance of some concrete subclass of
-     * {@link DayDate}
-     * @param day the day (1-31).
-     * @param month the month (1-12).
-     * @param yyyy the year (in the range 1900 to 9999).
-     * @return An instance of {@link DayDate}
-     */
-    public static DayDate makeDate(final int day, final int month,
-                                   final int yyyy) {
-        return DayDateFactory.makeDate(day, month, yyyy);
+    public DayDate getEndOfMonth() {
+        Month month = getMonth();
+        int year = getYear();
+        int lastDay = DateUtil.lastDayOfMonth(month, year);
+        return DayDateFactory.makeDate(lastDay, month, year);
     }
 
-    /**
-     * Factory method that returns a instance of some concrete subclass of
-     * {@link DayDate}
-     * @param day the day (1-31).
-     * @param month An instance of {@link Month} (JANUARY-DECEMBER).
-     * @param yyyy the year (in the range 1900 to 9999).
-     * @return An instance of {@link DayDate}
-     */
-    public static DayDate makeDate(final int day, final Month month,
-                                   final int yyyy) {
-        return DayDateFactory.makeDate(day, month, yyyy);
-    }
-
-    /**
-     * Factory method that returns a instance of some concrete subclass of
-     * {@link DayDate}
-     * @param serial date A Java date object
-     * @return An instance of {@link DayDate}
-     */
-    public static DayDate makeDate(final int serial) {
-        return DayDateFactory.makeDate(serial);
-    }
-
-    /**
-     * Factory method that returns an instance of a subclass of DayDate
-     * @param date A Java date object
-     * @return a instance of DayDate
-     */
-    public static DayDate makeDate(final java.util.Date date) {
-        return DayDateFactory.makeDate(date);
-    }
-
-
-    /**
-     * Returns a java.util.DayDate. Since java.util.DayDate has more precision than
-     * DayDate, we need to define a convention for the 'time of day'.
-     * @return this as <code>java.util.DayDate</code>
-     */
     public java.util.Date toDate() {
         final Calendar calendar = Calendar.getInstance();
         calendar.set(getYear(), getMonth().toInt() - 1, getDayOfMonth(), 0, 0, 0);
         return calendar.getTime();
     }
 
-    /**
-     * Converts the date to a string.
-     * @return a string representation of the date.
-     */
     public String toString() {
         return getDayOfMonth() + "-" + getMonth().toString()
-                                + "-" + getYear();
+                + "-" + getYear();
     }
 
     public Day getDayOfWeek() {

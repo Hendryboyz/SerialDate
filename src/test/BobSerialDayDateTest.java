@@ -1,16 +1,12 @@
 package test;
 
 import junit.framework.TestCase;
-import main.DateUtil;
-import main.DayDate;
-import main.Month;
-import main.SpreadsheetDayDate;
+import main.*;
 
 import java.util.GregorianCalendar;
 
 import static main.Day.*;
 import static main.Month.*;
-import static main.DayDate.*;
 
 public class BobSerialDayDateTest extends TestCase {
 
@@ -122,21 +118,21 @@ public class BobSerialDayDateTest extends TestCase {
     }
 
     public void testStringToMonthCode() throws Exception {
-        assertEquals(1, parseMonth("1").toInt());
-        assertEquals(2, parseMonth("2").toInt());
-        assertEquals(3, parseMonth("3").toInt());
-        assertEquals(4, parseMonth("4").toInt());
-        assertEquals(5, parseMonth("5").toInt());
-        assertEquals(6, parseMonth("6").toInt());
-        assertEquals(7, parseMonth("7").toInt());
-        assertEquals(8, parseMonth("8").toInt());
-        assertEquals(9, parseMonth("9").toInt());
-        assertEquals(10, parseMonth("10").toInt());
-        assertEquals(11, parseMonth("11").toInt());
-        assertEquals(12, parseMonth("12").toInt());
+        assertEquals(1, parse("1").toInt());
+        assertEquals(2, parse("2").toInt());
+        assertEquals(3, parse("3").toInt());
+        assertEquals(4, parse("4").toInt());
+        assertEquals(5, parse("5").toInt());
+        assertEquals(6, parse("6").toInt());
+        assertEquals(7, parse("7").toInt());
+        assertEquals(8, parse("8").toInt());
+        assertEquals(9, parse("9").toInt());
+        assertEquals(10, parse("10").toInt());
+        assertEquals(11, parse("11").toInt());
+        assertEquals(12, parse("12").toInt());
 
         try {
-            parseMonth("Hello");
+            parse("Hello");
             fail("Invalid month string should throw exception.");
         } catch (IllegalArgumentException e) {
         }
@@ -145,57 +141,57 @@ public class BobSerialDayDateTest extends TestCase {
             assertEquals(m, Month.fromInt(m).toInt());
         }
 
-        assertEquals(1, parseMonth("jan").toInt());
-        assertEquals(2, parseMonth("feb").toInt());
-        assertEquals(3, parseMonth("mar").toInt());
-        assertEquals(4, parseMonth("apr").toInt());
-        assertEquals(5, parseMonth("may").toInt());
-        assertEquals(6, parseMonth("jun").toInt());
-        assertEquals(7, parseMonth("jul").toInt());
-        assertEquals(8, parseMonth("aug").toInt());
-        assertEquals(9, parseMonth("sep").toInt());
-        assertEquals(10, parseMonth("oct").toInt());
-        assertEquals(11, parseMonth("nov").toInt());
-        assertEquals(12, parseMonth("dec").toInt());
+        assertEquals(1, parse("jan").toInt());
+        assertEquals(2, parse("feb").toInt());
+        assertEquals(3, parse("mar").toInt());
+        assertEquals(4, parse("apr").toInt());
+        assertEquals(5, parse("may").toInt());
+        assertEquals(6, parse("jun").toInt());
+        assertEquals(7, parse("jul").toInt());
+        assertEquals(8, parse("aug").toInt());
+        assertEquals(9, parse("sep").toInt());
+        assertEquals(10, parse("oct").toInt());
+        assertEquals(11, parse("nov").toInt());
+        assertEquals(12, parse("dec").toInt());
 
-        assertEquals(1, parseMonth("JAN").toInt());
-        assertEquals(2, parseMonth("FEB").toInt());
-        assertEquals(3, parseMonth("MAR").toInt());
-        assertEquals(4, parseMonth("APR").toInt());
-        assertEquals(5, parseMonth("MAY").toInt());
-        assertEquals(6, parseMonth("JUN").toInt());
-        assertEquals(7, parseMonth("JUL").toInt());
-        assertEquals(8, parseMonth("AUG").toInt());
-        assertEquals(9, parseMonth("SEP").toInt());
-        assertEquals(10, parseMonth("OCT").toInt());
-        assertEquals(11, parseMonth("NOV").toInt());
-        assertEquals(12, parseMonth("DEC").toInt());
+        assertEquals(1, parse("JAN").toInt());
+        assertEquals(2, parse("FEB").toInt());
+        assertEquals(3, parse("MAR").toInt());
+        assertEquals(4, parse("APR").toInt());
+        assertEquals(5, parse("MAY").toInt());
+        assertEquals(6, parse("JUN").toInt());
+        assertEquals(7, parse("JUL").toInt());
+        assertEquals(8, parse("AUG").toInt());
+        assertEquals(9, parse("SEP").toInt());
+        assertEquals(10, parse("OCT").toInt());
+        assertEquals(11, parse("NOV").toInt());
+        assertEquals(12, parse("DEC").toInt());
 
-        assertEquals(1, parseMonth("january").toInt());
-        assertEquals(2, parseMonth("february").toInt());
-        assertEquals(3, parseMonth("march").toInt());
-        assertEquals(4, parseMonth("april").toInt());
-        assertEquals(5, parseMonth("may").toInt());
-        assertEquals(6, parseMonth("june").toInt());
-        assertEquals(7, parseMonth("july").toInt());
-        assertEquals(8, parseMonth("august").toInt());
-        assertEquals(9, parseMonth("september").toInt());
-        assertEquals(10, parseMonth("october").toInt());
-        assertEquals(11, parseMonth("november").toInt());
-        assertEquals(12, parseMonth("december").toInt());
+        assertEquals(1, parse("january").toInt());
+        assertEquals(2, parse("february").toInt());
+        assertEquals(3, parse("march").toInt());
+        assertEquals(4, parse("april").toInt());
+        assertEquals(5, parse("may").toInt());
+        assertEquals(6, parse("june").toInt());
+        assertEquals(7, parse("july").toInt());
+        assertEquals(8, parse("august").toInt());
+        assertEquals(9, parse("september").toInt());
+        assertEquals(10, parse("october").toInt());
+        assertEquals(11, parse("november").toInt());
+        assertEquals(12, parse("december").toInt());
 
-        assertEquals(1, parseMonth("JANUARY").toInt());
-        assertEquals(2, parseMonth("FEBRUARY").toInt());
-        assertEquals(3, parseMonth("MARCH").toInt());
-        assertEquals(4, parseMonth("APRIL").toInt());
-        assertEquals(5, parseMonth("MAY").toInt());
-        assertEquals(6, parseMonth("JUNE").toInt());
-        assertEquals(7, parseMonth("JULY").toInt());
-        assertEquals(8, parseMonth("AUGUST").toInt());
-        assertEquals(9, parseMonth("SEPTEMBER").toInt());
-        assertEquals(10, parseMonth("OCTOBER").toInt());
-        assertEquals(11, parseMonth("NOVEMBER").toInt());
-        assertEquals(12, parseMonth("DECEMBER").toInt());
+        assertEquals(1, parse("JANUARY").toInt());
+        assertEquals(2, parse("FEBRUARY").toInt());
+        assertEquals(3, parse("MARCH").toInt());
+        assertEquals(4, parse("APRIL").toInt());
+        assertEquals(5, parse("MAY").toInt());
+        assertEquals(6, parse("JUNE").toInt());
+        assertEquals(7, parse("JULY").toInt());
+        assertEquals(8, parse("AUGUST").toInt());
+        assertEquals(9, parse("SEPTEMBER").toInt());
+        assertEquals(10, parse("OCTOBER").toInt());
+        assertEquals(11, parse("NOVEMBER").toInt());
+        assertEquals(12, parse("DECEMBER").toInt());
     }
 
     public void testIsLeapYear() throws Exception {
@@ -214,21 +210,21 @@ public class BobSerialDayDateTest extends TestCase {
     }
 
     public void testLeapYearCount() throws Exception {
-        assertEquals(0, SpreadsheetDayDate.leapYearCount(1900));
-        assertEquals(0, SpreadsheetDayDate.leapYearCount(1901));
-        assertEquals(0, SpreadsheetDayDate.leapYearCount(1902));
-        assertEquals(0, SpreadsheetDayDate.leapYearCount(1903));
-        assertEquals(1, SpreadsheetDayDate.leapYearCount(1904));
-        assertEquals(1, SpreadsheetDayDate.leapYearCount(1905));
-        assertEquals(1, SpreadsheetDayDate.leapYearCount(1906));
-        assertEquals(1, SpreadsheetDayDate.leapYearCount(1907));
-        assertEquals(2, SpreadsheetDayDate.leapYearCount(1908));
-        assertEquals(24, SpreadsheetDayDate.leapYearCount(1999));
-        assertEquals(25, SpreadsheetDayDate.leapYearCount(2001));
-        assertEquals(49, SpreadsheetDayDate.leapYearCount(2101));
-        assertEquals(73, SpreadsheetDayDate.leapYearCount(2201));
-        assertEquals(97, SpreadsheetDayDate.leapYearCount(2301));
-        assertEquals(122, SpreadsheetDayDate.leapYearCount(2401));
+        assertEquals(0, DateUtil.leapYearCount(1900));
+        assertEquals(0, DateUtil.leapYearCount(1901));
+        assertEquals(0, DateUtil.leapYearCount(1902));
+        assertEquals(0, DateUtil.leapYearCount(1903));
+        assertEquals(1, DateUtil.leapYearCount(1904));
+        assertEquals(1, DateUtil.leapYearCount(1905));
+        assertEquals(1, DateUtil.leapYearCount(1906));
+        assertEquals(1, DateUtil.leapYearCount(1907));
+        assertEquals(2, DateUtil.leapYearCount(1908));
+        assertEquals(24, DateUtil.leapYearCount(1999));
+        assertEquals(25, DateUtil.leapYearCount(2001));
+        assertEquals(49, DateUtil.leapYearCount(2101));
+        assertEquals(73, DateUtil.leapYearCount(2201));
+        assertEquals(97, DateUtil.leapYearCount(2301));
+        assertEquals(122, DateUtil.leapYearCount(2401));
     }
 
     public void testLastDayOfMonth() throws Exception {
@@ -369,7 +365,7 @@ public class BobSerialDayDateTest extends TestCase {
     }
 
     public void testEndOfCurrentMonth() throws Exception {
-        DayDate d = DayDate.makeDate(2);
+        DayDate d = DayDateFactory.makeDate(2);
         assertEquals(d(31, JANUARY.toInt(), 2006), d(1, JANUARY.toInt(), 2006).getEndOfCurrentMonth());
         assertEquals(d(28, FEBRUARY.toInt(), 2006), d(1, FEBRUARY.toInt(), 2006).getEndOfCurrentMonth());
         assertEquals(d(31, MARCH.toInt(), 2006), d(1, MARCH.toInt(), 2006).getEndOfCurrentMonth());
@@ -398,7 +394,7 @@ public class BobSerialDayDateTest extends TestCase {
     }
 
     public void testCreateInstanceFromDDMMYYYY() throws Exception {
-        DayDate dayDate = makeDate(1, JANUARY.toInt(), 1900);
+        DayDate dayDate = DayDateFactory.makeDate(1, JANUARY.toInt(), 1900);
         assertEquals(1, dayDate.getDayOfMonth());
         assertEquals(JANUARY, dayDate.getMonth());
         assertEquals(1900, dayDate.getYear());
@@ -406,15 +402,15 @@ public class BobSerialDayDateTest extends TestCase {
     }
 
     public void testCreateInstanceFromSerial() throws Exception {
-        assertEquals(d(1, JANUARY.toInt(), 1900), makeDate(2));
-        assertEquals(d(1, JANUARY.toInt(), 1901), makeDate(367));
+        assertEquals(d(1, JANUARY.toInt(), 1900), DayDateFactory.makeDate(2));
+        assertEquals(d(1, JANUARY.toInt(), 1901), DayDateFactory.makeDate(367));
     }
 
     public void testCreateInstanceFromJavaDate() throws Exception {
         assertEquals(d(1, JANUARY.toInt(), 1900),
-                makeDate(new GregorianCalendar(1900, 0, 1).getTime()));
+                DayDateFactory.makeDate(new GregorianCalendar(1900, 0, 1).getTime()));
 
         assertEquals(d(1, JANUARY.toInt(), 2006),
-                makeDate(new GregorianCalendar(2006, 0, 1).getTime()));
+                DayDateFactory.makeDate(new GregorianCalendar(2006, 0, 1).getTime()));
     }
 }

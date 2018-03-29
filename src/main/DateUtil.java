@@ -12,11 +12,6 @@ public class DateUtil {
         return DATE_FORMAT_SYMBOLS.getMonths();
     }
 
-    /**
-     * Determines whether or not the specified year is a leap year.
-     * @param yyyy the year (in the range of 1900 to 9999).
-     * @return <code>true</code> if the specified year is a leap year
-     */
     public static boolean isLeapYear(final int yyyy) {
         boolean fourth = (yyyy % 4) == 0;
         boolean hundredth = (yyyy % 100) == 0;
@@ -24,13 +19,6 @@ public class DateUtil {
         return fourth && (!hundredth || fourHundredth);
     }
 
-    /**
-     * Returns the number of the last day of the month, taking into account
-     * leap year
-     * @param month the month.
-     * @param yyyy the year (in the range 1900 to 9999).
-     * @return the number of the last day of the month.
-     */
     public static int lastDayOfMonth(Month month, int yyyy) {
         if (month == Month.FEBRUARY && isLeapYear(yyyy)) {
             return month.lastDay() + 1;
@@ -38,5 +26,12 @@ public class DateUtil {
         else {
             return month.lastDay();
         }
+    }
+
+    public static int leapYearCount(int year) {
+        final int leap4 = (year - 1896) / 4;
+        final int leap100 = (year - 1800) / 100;
+        final int leap400 = (year - 1600) / 400;
+        return leap4 - leap100 + leap400;
     }
 }
